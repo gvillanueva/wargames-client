@@ -20,7 +20,10 @@ LoginDialog::LoginDialog(QWidget *parent) :
     connect(ui->pbCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
     // TODO: connect(ui->pbRegister, SIGNAL(clicked(bool)), this, SLOT(register()));
 
+    // Recall application settings
     ui->txtUsername->setText(m_Settings.value("lastUser").toString());
+    if (ui->txtUsername->text().isEmpty())
+        ui->txtUsername->setFocus();
     ui->chkLastUser->setChecked(m_Settings.value("rememberLastUser").toBool());
 }
 

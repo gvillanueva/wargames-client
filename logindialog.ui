@@ -93,6 +93,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>txtPassword</tabstop>
+  <tabstop>chkLastUser</tabstop>
+  <tabstop>pbRegister</tabstop>
+  <tabstop>pbLogin</tabstop>
+  <tabstop>pbCancel</tabstop>
+  <tabstop>txtUsername</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
