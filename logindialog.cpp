@@ -62,9 +62,3 @@ void LoginDialog::accept()
 
     this->setEnabled(true);
 }
-
-void LoginDialog::reject()
-{
-    QDialog::reject();
-    QApplication::instance()->quit();
-}

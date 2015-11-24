@@ -18,7 +18,6 @@ public:
 
 public slots:
     virtual void accept();
-    virtual void reject();
 
 private:
     Ui::LoginDialog *ui;
