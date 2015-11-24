@@ -3,6 +3,10 @@
 #include "user.h"
 #include <QMessageBox>
 
+/*!
+ * \brief Creates a new LoginDialog instance.
+ * \param parent A parent QObject for this dialog.
+ */
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LoginDialog),
@@ -27,11 +31,17 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui->chkLastUser->setChecked(m_Settings.value("rememberLastUser").toBool());
 }
 
+/*!
+ * \brief Cleans up the user interface widgets allocated on the heap.
+ */
 LoginDialog::~LoginDialog()
 {
     delete ui;
 }
 
+/*!
+ * \brief Sends a User.login JSON-RPC request to the server.
+ */
 void LoginDialog::accept()
 {
     // Disable UI until response is returned
@@ -56,6 +66,10 @@ void LoginDialog::accept()
             this, SLOT(processLoginResponse(QJsonRpcMessage)));
 }
 
+/*!
+ * \brief Parses the response to the User.login JSON-RPC request.
+ * \param response The JSON-RPC response from a QJsonRpcHttpClient.
+ */
 void LoginDialog::processLoginResponse(const QJsonRpcMessage& response)
 {
     this->setEnabled(true);
