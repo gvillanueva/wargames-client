@@ -1,12 +1,12 @@
 #include "logindialog.h"
 #include "ui_logindialog.h"
-#include <qjsonrpc/qjsonrpchttpclient.h>
 #include "user.h"
 #include <QMessageBox>
 
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::LoginDialog)
+    ui(new Ui::LoginDialog),
+    m_Client("https://wargames.walkingtarget.com/chess/user.php", this)
 {
     ui->setupUi(this);
 
@@ -50,18 +50,19 @@ void LoginDialog::accept()
     loginParams.insert(1, QJsonValue(ui->txtPassword->text()));
 
     // Attempt to log in
-    QJsonRpcHttpClient client("https://wargames.walkingtarget.com/chess/user.php");
     QJsonRpcMessage message = QJsonRpcMessage::createRequest("login", loginParams);
-    QJsonRpcMessage response = client.sendMessageBlocking(message);
+    m_Client.sendMessage(message);
+    connect(&m_Client, SIGNAL(messageReceived(QJsonRpcMessage)),
+            this, SLOT(processLoginResponse(QJsonRpcMessage)));
+}
 
-    if (response.errorCode() != QJsonRpc::NoError) {
-        QMessageBox::critical
-        qDebug() << response.errorMessage();
-    }
-    else {
-        qDebug() << response.result().toString();
-        User::instance().setAuthToken(response.result().toString());
-    }
-
+void LoginDialog::processLoginResponse(const QJsonRpcMessage& response)
+{
     this->setEnabled(true);
+    if (response.errorCode() != QJsonRpc::NoError)
+        QMessageBox::critical(this, "Login error", response.errorMessage());
+    else {
+        User::instance().setAuthToken(response.result().toString());
+        QDialog::accept();
+    }
 }
