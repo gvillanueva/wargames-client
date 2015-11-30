@@ -13,19 +13,28 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     unit.cpp \
     logindialog.cpp \
     wargamesapplication.cpp \
-    user.cpp
+    user.cpp \
+    maindialog.cpp \
+    game.cpp \
+    gamelistmodel.cpp \
+    gamedialog.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     unit.h \
     logindialog.h \
     wargamesapplication.h \
-    user.h
+    user.h \
+    maindialog.h \
+    game.h \
+    gamelistmodel.h \
+    gamedialog.h
 
-FORMS    += mainwindow.ui \
-    logindialog.ui
+FORMS    += \
+    logindialog.ui \
+    maindialog.ui \
+    gamedialog.ui
 
 LIBS += -lqjsonrpc1
