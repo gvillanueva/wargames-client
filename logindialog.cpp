@@ -10,7 +10,7 @@
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LoginDialog),
-    m_Client("https://wargames.walkingtarget.com/chess/user.php", this)
+    m_Client("https://wargames.walkingtarget.com/api/user.php", this)
 {
     ui->setupUi(this);
 
