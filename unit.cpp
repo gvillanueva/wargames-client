@@ -1,9 +1,10 @@
 #include "unit.h"
-#include <qjsonrpc/qjsonrpchttpclient.h>
 #include <QVector3D>
 #include <qjsonrpc/qjsonrpcmessage.h>
 
-Unit::Unit(QObject *parent) : QObject(parent)
+Unit::Unit(QObject *parent) :
+    QObject(parent),
+    m_Client("http://wargames.walkingtarget.com/api/unit.php")
 {
 }
 
@@ -70,9 +71,8 @@ void Unit::move(QVector3D newPosition)
     // Error invalid position - outside of bounds, collision with terrain
     // Error, illegal move, determined by Game Rules
 
-    QJsonRpcHttpClient client("http://wargames.walkingtarget.com/chess/unit.php");
-    QJsonRpcMessage message = QJsonRpcMessage::createRequest("move");
-    QJsonRpcMessage response = client.sendMessageBlocking(message);
+    //QJsonRpcMessage message = QJsonRpcMessage::createRequest("move");
+    //QJsonRpcMessage response = client.sendMessageBlocking(message);
 
 //    if (response.errorCode() == SUCCESS)
 //        setDirection(value);

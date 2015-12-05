@@ -5,6 +5,7 @@
 #include <QUuid>
 #include <QVector3D>
 #include <QJsonObject>
+#include <qjsonrpc/qjsonrpchttpclient.h>
 
 class Unit : public QObject
 {
@@ -24,6 +25,7 @@ public slots:
     void turn(qreal newDirection);
 
 private:
+    QJsonRpcHttpClient m_Client;
     QUuid m_GameUuid;
     QUuid m_UserUuid;
     QUuid m_UnitUuid;
