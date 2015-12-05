@@ -22,6 +22,7 @@ public slots:
 
 private slots:
     void processLoginResponse(const QJsonRpcMessage& response);
+    void registerUser();
 
 private:
     Ui::LoginDialog *ui;

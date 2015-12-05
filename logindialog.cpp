@@ -2,6 +2,7 @@
 #include "ui_logindialog.h"
 #include "user.h"
 #include <QMessageBox>
+#include <QDesktopServices>
 
 /*!
  * \brief Creates a new LoginDialog instance.
@@ -22,7 +23,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     // Connect the buttons
     connect(ui->pbLogin, SIGNAL(clicked(bool)), this, SLOT(accept()));
     connect(ui->pbCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
-    // TODO: connect(ui->pbRegister, SIGNAL(clicked(bool)), this, SLOT(register()));
+    connect(ui->pbRegister, SIGNAL(clicked(bool)), this, SLOT(registerUser()));
 
     // Recall application settings
     ui->txtUsername->setText(m_Settings.value("lastUser").toString());
@@ -79,4 +80,13 @@ void LoginDialog::processLoginResponse(const QJsonRpcMessage& response)
         User::instance().setAuthToken(response.result().toString());
         QDialog::accept();
     }
+}
+
+/*!
+ * \brief Opens a browser window the user can use to register.
+ */
+void LoginDialog::registerUser()
+{
+    QUrl registerUserUrl("http://wargames.walkingtarget.com/register.php");
+    QDesktopServices::openUrl(registerUserUrl);
 }
