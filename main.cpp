@@ -7,14 +7,16 @@
 int main(int argc, char *argv[])
 {
     WarGamesApplication wga(argc, argv);
-    LoginDialog ld;
 
+    // Show login dialog
+    LoginDialog ld;
     ld.exec();
+    if (ld.result() != QDialog::Accepted)
+        return 0;
+
+    // Show main dialog
     MainDialog md;
-    if (ld.result() == QDialog::Accepted)
-    {
-        md.show();
-    }
+    md.show();
 
     return wga.exec();
 }
