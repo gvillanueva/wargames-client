@@ -37,4 +37,5 @@ FORMS    += \
     maindialog.ui \
     gamedialog.ui
 
-LIBS += -lqjsonrpc1
+win32:LIBS += -lqjsonrpc1
+unix:LIBS += -lqjsonrpc
