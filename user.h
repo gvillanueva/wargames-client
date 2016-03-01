@@ -9,6 +9,8 @@ public:
     static User& instance();
     QString authToken() const;
     void setAuthToken(const QString& value);
+    QString name() const;
+    void setName(const QString& value);
 
 private:
     User();
@@ -16,6 +18,7 @@ private:
     void operator=(const User&);
 
 private:
+    QString m_Name;
     QString m_AuthToken;
     static User* s_Instance;
 };

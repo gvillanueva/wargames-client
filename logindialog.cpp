@@ -77,6 +77,7 @@ void LoginDialog::processLoginResponse(const QJsonRpcMessage& response)
     if (response.errorCode() != QJsonRpc::NoError)
         QMessageBox::critical(this, "Login error", response.errorMessage());
     else {
+        User::instance().setName(ui->txtUsername->text());
         User::instance().setAuthToken(response.result().toString());
         QDialog::accept();
     }

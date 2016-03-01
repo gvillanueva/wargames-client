@@ -19,3 +19,13 @@ void User::setAuthToken(const QString& value)
 {
     m_AuthToken = value;
 }
+
+QString User::name() const
+{
+    return m_Name;
+}
+
+void User::setName(const QString& value)
+{
+    m_Name = value;
+}
