@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <qjsonrpc/qjsonrpchttpclient.h>
-#include "gamelistmodel.h"
+#include "../gamelistmodel.h"
 
 namespace Ui {
 class MainDialog;

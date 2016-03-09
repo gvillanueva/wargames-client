@@ -2,7 +2,7 @@
 #define LOBBYDIALOG_H
 
 #include <QDialog>
-#include "jsonrpcwebsocketclient.h"
+#include "../jsonrpc/jsonrpcwebsocketclient.h"
 
 namespace Ui {
 class LobbyDialog;

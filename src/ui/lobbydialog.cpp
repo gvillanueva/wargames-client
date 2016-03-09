@@ -1,6 +1,6 @@
 #include "lobbydialog.h"
 #include "ui_lobbydialog.h"
-#include "user.h"
+#include "../user.h"
 
 LobbyDialog::LobbyDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LobbyDialog),

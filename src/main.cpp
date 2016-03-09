@@ -1,6 +1,6 @@
 #include "wargamesapplication.h"
-#include "logindialog.h"
-#include "maindialog.h"
+#include "ui/logindialog.h"
+#include "ui/maindialog.h"
 #include <QSslSocket>
 #include <QMessageBox>
 

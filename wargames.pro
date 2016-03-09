@@ -12,38 +12,38 @@ TARGET = basic
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-    unit.cpp \
-    logindialog.cpp \
-    wargamesapplication.cpp \
-    user.cpp \
-    maindialog.cpp \
-    game.cpp \
-    gamelistmodel.cpp \
-    gamedialog.cpp \
-    creategamedialog.cpp \
-    jsonrpcwebsocketclient.cpp \
-    lobbydialog.cpp
+SOURCES += src/main.cpp\
+    src/unit.cpp \
+    src/ui/logindialog.cpp \
+    src/wargamesapplication.cpp \
+    src/user.cpp \
+    src/ui/maindialog.cpp \
+    src/game.cpp \
+    src/gamelistmodel.cpp \
+    src/ui/gamedialog.cpp \
+    src/ui/creategamedialog.cpp \
+    src/jsonrpc/jsonrpcwebsocketclient.cpp \
+    src/ui/lobbydialog.cpp
 
 HEADERS  += \
-    unit.h \
-    logindialog.h \
-    wargamesapplication.h \
-    user.h \
-    maindialog.h \
-    game.h \
-    gamelistmodel.h \
-    gamedialog.h \
-    creategamedialog.h \
-    jsonrpcwebsocketclient.h \
-    lobbydialog.h
+    src/unit.h \
+    src/ui/logindialog.h \
+    src/wargamesapplication.h \
+    src/user.h \
+    src/ui/maindialog.h \
+    src/game.h \
+    src/gamelistmodel.h \
+    src/ui/gamedialog.h \
+    src/ui/creategamedialog.h \
+    src/jsonrpc/jsonrpcwebsocketclient.h \
+    src/ui/lobbydialog.h
 
 FORMS    += \
-    logindialog.ui \
-    maindialog.ui \
-    gamedialog.ui \
-    creategamedialog.ui \
-    lobbydialog.ui
+    src/ui/logindialog.ui \
+    src/ui/maindialog.ui \
+    src/ui/gamedialog.ui \
+    src/ui/creategamedialog.ui \
+    src/ui/lobbydialog.ui
 
 INCLUDEPATH += $$(QTDIR)/include/qjsonrpc
 
