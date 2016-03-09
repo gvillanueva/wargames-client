@@ -4,6 +4,7 @@
 #include "game.h"
 #include "gamedialog.h"
 #include <QMessageBox>
+#include "creategamedialog.h"
 
 MainDialog::MainDialog(QWidget *parent) :
     QDialog(parent),
@@ -60,4 +61,10 @@ void MainDialog::displayGame(const QModelIndex& index)
 {
     GameDialog *gd = new GameDialog;
     gd->show();
+}
+
+void MainDialog::on_pbCreateGame_clicked()
+{
+    CreateGameDialog d;
+    d.exec();
 }

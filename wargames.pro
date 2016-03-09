@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +20,10 @@ SOURCES += main.cpp\
     maindialog.cpp \
     game.cpp \
     gamelistmodel.cpp \
-    gamedialog.cpp
+    gamedialog.cpp \
+    creategamedialog.cpp \
+    jsonrpcwebsocketclient.cpp \
+    lobbydialog.cpp
 
 HEADERS  += \
     unit.h \
@@ -30,12 +33,19 @@ HEADERS  += \
     maindialog.h \
     game.h \
     gamelistmodel.h \
-    gamedialog.h
+    gamedialog.h \
+    creategamedialog.h \
+    jsonrpcwebsocketclient.h \
+    lobbydialog.h
 
 FORMS    += \
     logindialog.ui \
     maindialog.ui \
-    gamedialog.ui
+    gamedialog.ui \
+    creategamedialog.ui \
+    lobbydialog.ui
+
+INCLUDEPATH += $$(QTDIR)/include/qjsonrpc
 
 win32:LIBS += -lqjsonrpc1
 unix:LIBS += -lqjsonrpc

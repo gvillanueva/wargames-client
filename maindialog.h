@@ -21,6 +21,8 @@ private slots:
     void processUserGamesResponse(const QJsonRpcMessage& response);
     void displayGame(const QModelIndex& index);
 
+    void on_pbCreateGame_clicked();
+
 private:
     Ui::MainDialog *ui;
     GameListModel m_UsersGames;
