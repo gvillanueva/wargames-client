@@ -18,6 +18,8 @@ LobbyDialog::LobbyDialog(QWidget *parent) :
     m_Client.sendMessage(listen);
     connect(&m_Client, SIGNAL(messageReceived(QJsonRpcMessage)),
             this, SLOT(parseLobbyMessage(QJsonRpcMessage)));
+    connect(&m_Client, SIGNAL(notificationReceived(QJsonRpcMessage)),
+            this, SLOT(parseLobbyMessage(QJsonRpcMessage)));
 }
 
 LobbyDialog::~LobbyDialog()
