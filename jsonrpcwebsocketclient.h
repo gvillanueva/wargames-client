@@ -6,28 +6,36 @@
 #include <qjsonrpcservicereply.h>
 //#include <QWebSocket>
 
-class QWebSocket;
+class JsonRpcWebSocketResponse : public QObject
+{
+    Q_OBJECT
+signals:
+    void messageReceived(const QJsonDocument& doc);
+};
+
+
+class JsonRpcWebSocketResponse;
 class JsonRpcWebSocketReplyPrivate;
 class JsonRpcWebSocketReply : public QJsonRpcServiceReply
 {
     Q_OBJECT
 public:
     JsonRpcWebSocketReply(const QJsonRpcMessage& request,
-                          QWebSocket* socket, QObject *parent = 0);
+                          JsonRpcWebSocketResponse *response, QObject *parent = 0);
     virtual ~JsonRpcWebSocketReply() {}
 
 Q_SIGNALS:
     void messageReceived(const QJsonRpcMessage &message);
 
 private Q_SLOTS:
-    void binaryMessageReceived(const QByteArray& data);
-    void textMessageReceived(const QString& data);
+    void responseReceived(const QJsonRpcMessage &response);
 
 private:
     Q_DECLARE_PRIVATE(JsonRpcWebSocketReply)
 };
 
 
+class QWebSocket;
 class JsonRpcWebSocketClientPrivate;
 class JsonRpcWebSocketClient : public QJsonRpcAbstractSocket
 {
@@ -44,6 +52,10 @@ public:
 
     QSslConfiguration sslConfiguration() const;
     void setSslConfiguration(const QSslConfiguration &sslConfiguration);
+
+signals:
+    void notificationReceived(const QJsonRpcMessage& message);
+    void messageError(const QJsonRpcMessage& message);
 
 public Q_SLOTS:
     void open();
@@ -67,6 +79,9 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     virtual void handleAuthenticationRequired(const QNetworkProxy& proxy, QAuthenticator* authenticator);
+    virtual void internalTextMessageReceived(const QString& message);
+    virtual void internalBinaryMessageReceived(const QByteArray& message);
+    virtual void processMessage(const QJsonDocument& doc);
     void debugConnect()
     {
         qDebug() << "connected";

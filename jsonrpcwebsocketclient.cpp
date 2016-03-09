@@ -15,77 +15,28 @@
 class JsonRpcWebSocketReplyPrivate : public QJsonRpcServiceReplyPrivate
 {
 public:
-    int a;
+    JsonRpcWebSocketResponse *websockResponse;
 };
 
 JsonRpcWebSocketReply::JsonRpcWebSocketReply(const QJsonRpcMessage& request,
-                                    QWebSocket* socket, QObject *parent)
+                                    JsonRpcWebSocketResponse* response, QObject *parent)
     : QJsonRpcServiceReply(*new JsonRpcWebSocketReplyPrivate, parent)
 {
     Q_D(JsonRpcWebSocketReply);
     d->request = request;
-    connect(socket, SIGNAL(binaryMessageReceived(QByteArray)),
-            this, SLOT(binaryMessageReceived(QByteArray)));
-    connect(socket, SIGNAL(textMessageReceived(QString)),
-            this, SLOT(textMessageReceived(QString)));
+    d->websockResponse = response;
+    connect(d->websockResponse, SIGNAL(messageReceived(QJsonRpcMessage)),
+            this, SLOT(responseReceived(QJsonRpcMessage)));
 }
 
-void JsonRpcWebSocketReply::textMessageReceived(const QString& data)
+void JsonRpcWebSocketReply::responseReceived(const QJsonRpcMessage& response)
 {
-    qDebug(__func__);
     Q_D(JsonRpcWebSocketReply);
-    QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
-    if (doc.isEmpty() || doc.isNull() || !doc.isObject()) {
-        d->response =
-            d->request.createErrorResponse(QJsonRpc::ParseError,
-                                           "unable to process incoming JSON data",
-                                           data);
-    } else {
-        qJsonRpcDebug() << "received: " << doc.toJson();
-        QJsonRpcMessage response = QJsonRpcMessage::fromObject(doc.object());
-        Q_EMIT messageReceived(response);
-
-        if (d->request.type() == QJsonRpcMessage::Request &&
-            d->request.id() != response.id()) {
-            d->response =
-                d->request.createErrorResponse(QJsonRpc::InternalError,
-                                               "invalid response id", data);
-        } else {
-            d->response = response;
-        }
-    }
-
+    d->response = response;
+    Q_EMIT messageReceived(response);
     Q_EMIT finished();
 }
 
-void JsonRpcWebSocketReply::binaryMessageReceived(const QByteArray& data)
-{
-    qDebug(__func__);
-    Q_D(JsonRpcWebSocketReply);
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    if (doc.isEmpty() || doc.isNull() || !doc.isObject()) {
-        d->response =
-            d->request.createErrorResponse(QJsonRpc::ParseError,
-                                           "unable to process incoming JSON data",
-                                           QString::fromUtf8(data));
-    } else {
-        qJsonRpcDebug() << "received: " << doc.toJson();
-        QJsonRpcMessage response = QJsonRpcMessage::fromObject(doc.object());
-        Q_EMIT messageReceived(response);
-
-        if (d->request.type() == QJsonRpcMessage::Request &&
-            d->request.id() != response.id()) {
-            d->response =
-                d->request.createErrorResponse(QJsonRpc::InternalError,
-                                               "invalid response id",
-                                               QString::fromUtf8(data));
-        } else {
-            d->response = response;
-        }
-    }
-
-    Q_EMIT finished();
-}
 
 class JsonRpcWebSocketClientPrivate : public QJsonRpcAbstractSocketPrivate
 {
@@ -99,18 +50,27 @@ public:
                          websocket, SLOT(ignoreSslErrors()));
         QObject::connect(client, SIGNAL(destroyed(QObject*)),
                          websocket, SLOT(close()));
+        QObject::connect(websocket, SIGNAL(textMessageReceived(QString)),
+                         client, SLOT(internalTextMessageReceived(QString)));
+        QObject::connect(websocket, SIGNAL(binaryMessageReceived(QByteArray)),
+                         client, SLOT(internalBinaryMessageReceived(QByteArray)));
+
+        // Debug connection
         QObject::connect(websocket, SIGNAL(connected()),
                          client, SLOT(debugConnect()));
     }
 
-    void writeMessage(const QJsonRpcMessage& message)
+    JsonRpcWebSocketResponse* writeMessage(const QJsonRpcMessage& message)
     {
         qDebug(__func__);
         QByteArray data = message.toJson();
-        qint64 q = websocket->sendBinaryMessage(data);
-        qDebug() << q;
+        websocket->sendBinaryMessage(data);
+        JsonRpcWebSocketResponse* response = new JsonRpcWebSocketResponse;
+        responses.insert(message.id(), response);
+        return response;
     }
 
+    QHash<int, JsonRpcWebSocketResponse*> responses;
     QUrl endpoint;
     QWebSocket *websocket;
     QSslConfiguration sslConfiguration;
@@ -131,6 +91,7 @@ JsonRpcWebSocketClient::JsonRpcWebSocketClient(const QString &endpoint, QObject 
     d->initializeWebSocket(this);
 }
 
+#define Properties {
 QUrl JsonRpcWebSocketClient::endPoint() const
 {
     Q_D(const JsonRpcWebSocketClient);
@@ -166,6 +127,7 @@ void JsonRpcWebSocketClient::setSslConfiguration(const QSslConfiguration &sslCon
     Q_D(JsonRpcWebSocketClient);
     d->sslConfiguration = sslConfiguration;
 }
+#define EndProperties }
 
 void JsonRpcWebSocketClient::open()
 {
@@ -201,6 +163,7 @@ void JsonRpcWebSocketClient::notify(const QJsonRpcMessage &message)
     /*QNetworkReply *reply = */d->writeMessage(message);
     //connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 
+    // notify() sends notifications, i.e. a JSON-RPC request that expects no response
     // NOTE: we might want to connect this to a local slot to track errors
     //       for debugging later?
     //connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), reply, SLOT(deleteLater()));
@@ -214,9 +177,8 @@ QJsonRpcServiceReply* JsonRpcWebSocketClient::sendMessage(const QJsonRpcMessage 
         return 0;
     }
 
-    JsonRpcWebSocketReply *serviceReply = new JsonRpcWebSocketReply(message, d->websocket);
-    /*QNetworkReply *reply = */d->writeMessage(message);
-
+    JsonRpcWebSocketResponse *response = d->writeMessage(message);
+    JsonRpcWebSocketReply *serviceReply = new JsonRpcWebSocketReply(message, response);
     return serviceReply;
 }
 
@@ -287,4 +249,46 @@ void JsonRpcWebSocketClient::handleAuthenticationRequired(const QNetworkProxy& p
 {
     Q_UNUSED(proxy)
     Q_UNUSED(authenticator)
+}
+
+void JsonRpcWebSocketClient::internalTextMessageReceived(const QString& message)
+{
+    qDebug(__func__);
+    processMessage(QJsonDocument::fromJson(message.toUtf8()));
+}
+
+void JsonRpcWebSocketClient::internalBinaryMessageReceived(const QByteArray& message)
+{
+    qDebug(__func__);
+    processMessage(QJsonDocument::fromJson(message));
+}
+
+void JsonRpcWebSocketClient::processMessage(const QJsonDocument& doc)
+{
+    Q_D(JsonRpcWebSocketClient);
+    if (doc.isEmpty() || doc.isNull() || !doc.isObject())
+    {
+        QJsonRpcMessage error =  QJsonRpcMessage().
+                createErrorResponse(QJsonRpc::ParseError,
+                                    "unable to process incoming JSON data",
+                                    QString::fromUtf8(doc.toBinaryData()));
+        Q_EMIT messageError(error);
+    }
+    else
+    {
+        qJsonRpcDebug() << "received: " << doc.toJson();
+        QJsonRpcMessage response = QJsonRpcMessage::fromObject(doc.object());
+        if (0 == response.id())
+            Q_EMIT notificationReceived(response);
+        else if (d->responses.contains(response.id()))
+            d->responses[response.id()]->messageReceived(doc);
+        else
+        {
+            QJsonRpcMessage error =  QJsonRpcMessage().
+                    createErrorResponse(QJsonRpc::InternalError,
+                                        "invalid response id",
+                                        QString::fromUtf8(doc.toBinaryData()));
+            Q_EMIT messageError(error);
+        }
+    }
 }
