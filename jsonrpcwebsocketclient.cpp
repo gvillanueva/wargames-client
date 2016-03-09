@@ -60,6 +60,11 @@ public:
                          client, SLOT(debugConnect()));
     }
 
+    ~JsonRpcWebSocketClientPrivate() {
+        websocket->close();
+        delete websocket;
+    }
+
     JsonRpcWebSocketResponse* writeMessage(const QJsonRpcMessage& message)
     {
         qDebug(__func__);
