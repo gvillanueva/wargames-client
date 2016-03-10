@@ -56,6 +56,7 @@ void LobbyDialog::on_pbSend_clicked()
     QJsonArray chatParams;
     chatParams.append(User::instance().name());
     chatParams.append(ui->leMessage->text());
+    ui->leMessage->clear();
 
     QJsonRpcMessage message = QJsonRpcMessage::createRequest("game.chat", chatParams);
     m_Client.sendMessage(message);
