@@ -10,7 +10,7 @@ class JsonRpcWebSocketResponse : public QObject
 {
     Q_OBJECT
 signals:
-    void messageReceived(const QJsonDocument& doc);
+    void messageReceived(const QJsonRpcMessage& message);
 };
 
 

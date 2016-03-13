@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/chess">
+        <file>images/bBishop.bmp</file>
+        <file>images/bKing.bmp</file>
+        <file>images/bKnight.bmp</file>
+        <file>images/bPawn.bmp</file>
+        <file>images/bQueen.bmp</file>
+        <file>images/bRook.bmp</file>
+        <file>images/wBishop.bmp</file>
+        <file>images/wKing.bmp</file>
+        <file>images/wKnight.bmp</file>
+        <file>images/wPawn.bmp</file>
+        <file>images/wQueen.bmp</file>
+        <file>images/wRook.bmp</file>
+    </qresource>
+</RCC>

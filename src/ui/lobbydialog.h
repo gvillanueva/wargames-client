@@ -13,7 +13,7 @@ class LobbyDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LobbyDialog(QWidget *parent = 0);
+    explicit LobbyDialog(const QString& gameName, QWidget *parent = 0);
     ~LobbyDialog();
 
 private slots:
@@ -24,6 +24,7 @@ private slots:
 private:
     Ui::LobbyDialog *ui;
     JsonRpcWebSocketClient m_Client;
+    QString m_GameName;
 };
 
 #endif // LOBBYDIALOG_H

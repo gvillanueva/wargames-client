@@ -1,6 +1,6 @@
 #include "logindialog.h"
 #include "ui_logindialog.h"
-#include "user.h"
+#include "../user.h"
 #include <QMessageBox>
 #include <QDesktopServices>
 
@@ -11,7 +11,7 @@
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LoginDialog),
-    m_Client("https://wargames.walkingtarget.com/api/user.php", this)
+    m_Client("http://localhost:8000", this)
 {
     ui->setupUi(this);
 
@@ -57,28 +57,30 @@ void LoginDialog::accept()
 
     // Set up JSON-RPC parameters
     QJsonArray loginParams;
-    loginParams.insert(0, QJsonValue(ui->txtUsername->text()));
-    loginParams.insert(1, QJsonValue(ui->txtPassword->text()));
+    QJsonObject loginObj;
+    loginObj.insert("name", ui->txtUsername->text());
+    loginObj.insert("password", ui->txtPassword->text());
+    loginParams.insert(0, loginObj);
 
     // Attempt to log in
     QJsonRpcMessage message = QJsonRpcMessage::createRequest("login", loginParams);
-    m_Client.sendMessage(message);
-    connect(&m_Client, SIGNAL(messageReceived(QJsonRpcMessage)),
-            this, SLOT(processLoginResponse(QJsonRpcMessage)));
+    QJsonRpcServiceReply *reply = m_Client.sendMessage(message);
+    connect(reply, SIGNAL(finished()), this, SLOT(processReply()));
 }
 
 /*!
  * \brief Parses the response to the User.login JSON-RPC request.
  * \param response The JSON-RPC response from a QJsonRpcHttpClient.
  */
-void LoginDialog::processLoginResponse(const QJsonRpcMessage& response)
+void LoginDialog::processReply()
 {
+    QJsonRpcServiceReply* reply = qobject_cast<QJsonRpcServiceReply*>(QObject::sender());
     this->setEnabled(true);
-    if (response.errorCode() != QJsonRpc::NoError)
-        QMessageBox::critical(this, "Login error", response.errorMessage());
+    if (reply->response().errorCode() != QJsonRpc::NoError)
+        QMessageBox::critical(this, "Login error", reply->response().errorMessage());
     else {
         User::instance().setName(ui->txtUsername->text());
-        User::instance().setAuthToken(response.result().toString());
+        User::instance().setAuthToken(reply->response().result().toString());
         QDialog::accept();
     }
 }

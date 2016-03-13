@@ -49,3 +49,6 @@ INCLUDEPATH += $$(QTDIR)/include/qjsonrpc
 
 win32:LIBS += -lqjsonrpc1
 unix:LIBS += -lqjsonrpc
+
+RESOURCES += \
+    chess.qrc

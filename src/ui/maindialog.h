@@ -20,10 +20,11 @@ public:
 private slots:
     void processUserGamesResponse(const QJsonRpcMessage& response);
     void displayGame(const QModelIndex& index);
-
     void on_pbCreateGame_clicked();
+    void on_pbRefresh_clicked();
 
 private:
+    void sendListGamesRequest();
     Ui::MainDialog *ui;
     GameListModel m_UsersGames;
     QJsonRpcHttpClient m_Client;

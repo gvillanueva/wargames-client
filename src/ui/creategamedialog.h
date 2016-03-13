@@ -2,6 +2,7 @@
 #define CREATEGAMEDIALOG_H
 
 #include <QDialog>
+#include <qjsonrpc/qjsonrpchttpclient.h>
 
 namespace Ui {
 class CreateGameDialog;
@@ -18,8 +19,12 @@ public:
 public slots:
     virtual void accept();
 
+private slots:
+    void processCreateRequest();
+
 private:
     Ui::CreateGameDialog *ui;
+    QJsonRpcHttpClient m_Client;
 };
 
 #endif // CREATEGAMEDIALOG_H

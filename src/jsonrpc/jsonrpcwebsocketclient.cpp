@@ -285,8 +285,10 @@ void JsonRpcWebSocketClient::processMessage(const QJsonDocument& doc)
         QJsonRpcMessage response = QJsonRpcMessage::fromObject(doc.object());
         if (0 == response.id())
             Q_EMIT notificationReceived(response);
-        else if (d->responses.contains(response.id()))
-            d->responses[response.id()]->messageReceived(doc);
+        else if (d->responses.contains(response.id())) {
+            d->responses[response.id()]->messageReceived(response);
+            Q_EMIT messageReceived(response);
+        }
         else
         {
             QJsonRpcMessage error =  QJsonRpcMessage().

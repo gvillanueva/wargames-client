@@ -10,22 +10,16 @@ MainDialog::MainDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MainDialog),
     m_UsersGames(this),
-    m_Client("http://wargames.walkingtarget.com/api/matchmaker.php", this)
+    m_Client("http://localhost:8000", this)
 {
     ui->setupUi(this);
 
     connect(ui->lvMyGames, SIGNAL(activated(QModelIndex)),
             this, SLOT(displayGame(QModelIndex)));
-
-    // Set up JSON-RPC parameters
-    QJsonArray getUserGamesParams;
-    getUserGamesParams.insert(0, QJsonValue(User::instance().authToken()));
-
-    // Attempt to log in
-    QJsonRpcMessage message = QJsonRpcMessage::createRequest("getUserGames", getUserGamesParams);
-    m_Client.sendMessage(message);
     connect(&m_Client, SIGNAL(messageReceived(QJsonRpcMessage)),
             this, SLOT(processUserGamesResponse(QJsonRpcMessage)));
+
+    sendListGamesRequest();
 }
 
 MainDialog::~MainDialog()
@@ -33,20 +27,34 @@ MainDialog::~MainDialog()
     delete ui;
 }
 
+void MainDialog::sendListGamesRequest()
+{
+    // Set up JSON-RPC parameters
+    QJsonObject userObj;
+    userObj.insert("authToken", User::instance().authToken());
+    QJsonObject filterObj;
+    filterObj.insert("myGames", true);
+    QJsonArray listGamesParams = QJsonArray() << userObj << filterObj;
+
+    // Attempt to log in
+    QJsonRpcMessage message = QJsonRpcMessage::createRequest("listGames", listGamesParams);
+    m_Client.sendMessage(message);
+}
+
 void MainDialog::processUserGamesResponse(const QJsonRpcMessage& response)
 {
     if (response.errorCode() != QJsonRpc::NoError) {
-        QMessageBox::critical(this, "Get user's games error", response.errorMessage());
+        QMessageBox::critical(this, "Game list error", response.errorMessage());
         return;
     }
 
-    QJsonValue value = response.result();
-    if (value.isArray())
+    // Ensure result is an array of game objects
+    if (response.result().isArray())
     {
+        // Convert value to array, and parse game objects from it
+        QJsonArray jsonArray = response.result().toArray();
         GameList usersGamesList;
 
-        // Convert value to array, and parse game objects from it
-        QJsonArray jsonArray = value.toArray();
         foreach(const QJsonValue& jsonValue, jsonArray)
             if (jsonValue.isObject())
                 usersGamesList.append(Game(jsonValue.toObject()));
@@ -54,6 +62,9 @@ void MainDialog::processUserGamesResponse(const QJsonRpcMessage& response)
         // Create a model and set it's view
         m_UsersGames.setList(usersGamesList);
         ui->lvMyGames->setModel(&m_UsersGames);
+    } else {
+        QMessageBox::critical(this, "Game list error", "Response result formatted improperly");
+        return;
     }
 }
 
@@ -65,6 +76,11 @@ void MainDialog::displayGame(const QModelIndex& index)
 
 void MainDialog::on_pbCreateGame_clicked()
 {
-    CreateGameDialog d;
-    d.exec();
+    CreateGameDialog *d = new CreateGameDialog;
+    d->show();
+}
+
+void MainDialog::on_pbRefresh_clicked()
+{
+    sendListGamesRequest();
 }

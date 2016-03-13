@@ -21,7 +21,7 @@ public slots:
     virtual void accept();
 
 private slots:
-    void processLoginResponse(const QJsonRpcMessage& response);
+    void processReply();
     void registerUser();
 
 private:
