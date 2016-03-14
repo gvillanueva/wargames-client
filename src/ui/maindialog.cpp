@@ -5,6 +5,7 @@
 #include "gamedialog.h"
 #include <QMessageBox>
 #include "creategamedialog.h"
+#include "joingamedialog.h"
 
 MainDialog::MainDialog(QWidget *parent) :
     QDialog(parent),
@@ -18,6 +19,7 @@ MainDialog::MainDialog(QWidget *parent) :
             this, SLOT(displayGame(QModelIndex)));
     connect(&m_Client, SIGNAL(messageReceived(QJsonRpcMessage)),
             this, SLOT(processUserGamesResponse(QJsonRpcMessage)));
+    connect(ui->pbRefresh, SIGNAL(clicked(bool)), this, SLOT(sendListGamesRequest()));
 
     sendListGamesRequest();
 }
@@ -80,7 +82,8 @@ void MainDialog::on_pbCreateGame_clicked()
     d->show();
 }
 
-void MainDialog::on_pbRefresh_clicked()
+void MainDialog::on_pbJoinGame_clicked()
 {
-    sendListGamesRequest();
+    JoinGameDialog *d = new JoinGameDialog;
+    d->exec();
 }
