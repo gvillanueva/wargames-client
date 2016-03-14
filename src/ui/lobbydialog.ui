@@ -25,7 +25,14 @@
     <widget class="QLineEdit" name="leMessage"/>
    </item>
    <item row="1" column="1" colspan="2">
-    <widget class="QTextEdit" name="teHistory"/>
+    <widget class="QTextEdit" name="teHistory">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" rowspan="3">
     <widget class="QListView" name="lvUsers">
@@ -38,7 +45,14 @@
     </widget>
    </item>
    <item row="0" column="1" colspan="2">
-    <widget class="QGraphicsView" name="graphicsView"/>
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
