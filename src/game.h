@@ -16,6 +16,7 @@ public:
     void setName(const QString& value);
     bool isPublic() const;
     void setIsPublic(bool value);
+    int numUsers() const;
     int maxUsers() const;
     void setMaxUsers(int value);
 

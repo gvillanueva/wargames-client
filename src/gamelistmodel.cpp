@@ -31,7 +31,9 @@ QVariant GameListModel::data(const QModelIndex &index, int role) const
         if (index.column() == 0)
             return m_List[index.row()].name();
         else if (index.column() == 1)
-            return m_List[index.row()].maxUsers();
+            return QString("%0/%1").
+                    arg(m_List[index.row()].numUsers()).
+                    arg(m_List[index.row()].maxUsers());
         else if (index.column() == 2)
             return m_List[index.row()].isPublic();
     }
@@ -50,7 +52,7 @@ QVariant GameListModel::headerData(int section, Qt::Orientation orientation, int
         case 0:
             return tr("Name");
         case 1:
-            return tr("Max Users");
+            return tr("Users");
         case 2:
             return tr("Public");
         default:

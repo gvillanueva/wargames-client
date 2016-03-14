@@ -43,6 +43,11 @@ void Game::setIsPublic(bool value)
     m_IsPublic = value;
 }
 
+int Game::numUsers() const
+{
+    return m_NumUsers;
+}
+
 int Game::maxUsers() const
 {
     return m_MaxUsers;
