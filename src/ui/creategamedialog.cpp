@@ -43,11 +43,11 @@ void CreateGameDialog::accept()
 void CreateGameDialog::processCreateRequest()
 {
     QJsonRpcServiceReply* reply = qobject_cast<QJsonRpcServiceReply*>(QObject::sender());
-    this->setEnabled(true);
 
     QJsonRpcMessage response = reply->response();
     if (response.errorCode() != QJsonRpc::NoError) {
         QMessageBox::critical(this, "Create game error", response.errorMessage());
+        this->setEnabled(true);
         return;
     }
 

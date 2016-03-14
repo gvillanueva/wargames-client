@@ -1,14 +1,25 @@
 #include "lobbydialog.h"
 #include "ui_lobbydialog.h"
 #include "../user.h"
-#include <QStandardItemModel>
+#include <QGraphicsPixmapItem>
+
+const int SQ_SIZE = 48;
+const int SQ_ROWS = 8;
+const int SQ_COLS = 8;
+
+void MyPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    emit moved(this->data(0).toInt(), pos());
+}
 
 LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     QDialog(parent), ui(new Ui::LobbyDialog),
     m_Client("ws://localhost:8000/", this),
-    m_GameName(gameName)
+    m_GameName(gameName),
+    m_Scene(0)
 {
     ui->setupUi(this);
+    m_Scene = new QGraphicsScene(0, 0, SQ_SIZE * SQ_ROWS, SQ_SIZE * SQ_COLS);
 
     // Set up JSON-RPC parameters
     QJsonArray connectParams;
@@ -27,23 +38,25 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     connect(&m_Client, SIGNAL(notificationReceived(QJsonRpcMessage)),
             this, SLOT(parseLobbyMessage(QJsonRpcMessage)));
 
-    QStandardItemModel *model = new QStandardItemModel(this);
-    model->setRowCount(8);
-    model->setColumnCount(8);
-
     for (int c = 0; c < 8; c++)
     {
-        QStandardItem *wPawn = new QStandardItem;
-        wPawn->setText(QString("White Pawn %0").arg(QString::number(c)));
-        wPawn->setIcon(QIcon(":/chess/wPawn.bmp"));
-        model->setItem(1, c, wPawn);
-
-        QStandardItem *bPawn = new QStandardItem;
-        bPawn->setText(QString("Black Pawn %0").arg(QString::number(c)));
-        bPawn->setIcon(QIcon(":/chess/bPawn.bmp"));
-        model->setItem(6, c, bPawn);
+        MyPixmapItem *wPawn = new MyPixmapItem(QPixmap(":/chess/images/wPawn.bmp"));
+        wPawn->setPos(SQ_SIZE * c + (SQ_SIZE - wPawn->boundingRect().width()) / 2, 0);
+        wPawn->setFlag(QGraphicsItem::ItemIsMovable);
+        wPawn->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+        wPawn->setData(0, QString::number(c));
+        MyPixmapItem *bPawn = new MyPixmapItem(QPixmap(":/chess/images/bPawn.bmp"));
+        bPawn->setPos(SQ_SIZE * c + (SQ_SIZE - wPawn->boundingRect().width()) / 2, 40);
+        bPawn->setFlag(QGraphicsItem::ItemIsMovable);
+        bPawn->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+        bPawn->setData(0, QString::number(8 + c));
+        m_Scene->addItem(wPawn);
+        m_Scene->addItem(bPawn);
+        connect(wPawn, SIGNAL(moved(int, QPointF)), this, SLOT(sendMoved(int,QPointF)));
+        connect(bPawn, SIGNAL(moved(int, QPointF)), this, SLOT(sendMoved(int,QPointF)));
     }
-    ui->tableView->setModel(model);
+
+    ui->graphicsView->setScene(m_Scene);
 }
 
 LobbyDialog::~LobbyDialog()
@@ -76,6 +89,15 @@ void LobbyDialog::parseLobbyMessage(const QJsonRpcMessage& message)
         QJsonObject unitObj = params[1].toObject();
         QJsonObject moveObj = params[2].toObject();
 
+        foreach(QGraphicsItem* item, m_Scene->items())
+        {
+            if (item->data(0).toInt() == unitObj["id"].toInt())
+            {
+                item->setPos(QPointF(moveObj["x"].toDouble(),
+                                     moveObj["y"].toDouble()));
+                break;
+            }
+        }
 
         qDebug() << message.result().toString();
     }
@@ -87,6 +109,23 @@ void LobbyDialog::parseLobbyMessage(const QJsonRpcMessage& message)
     {
         qDebug() << message.result().toString();
     }
+}
+
+void LobbyDialog::sendMoved(int id, const QPointF pos)
+{
+    QJsonObject userObj;
+    userObj.insert("authToken", User::instance().authToken());
+    QJsonObject gameObj;
+    gameObj.insert("name", m_GameName);
+    QJsonObject unitObj;
+    unitObj.insert("id", id);
+    QJsonObject moveObj;
+    moveObj.insert("x", pos.x());
+    moveObj.insert("y", pos.y());
+    QJsonArray moveParams = QJsonArray() << userObj << gameObj << unitObj << moveObj;
+
+    QJsonRpcMessage message = QJsonRpcMessage::createRequest("game.move", moveParams);
+    m_Client.sendMessage(message);
 }
 
 void LobbyDialog::on_pbSend_clicked()

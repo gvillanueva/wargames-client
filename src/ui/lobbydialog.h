@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include "../jsonrpc/jsonrpcwebsocketclient.h"
+#include <QGraphicsScene>
+#include <QGraphicsItem>
 
 namespace Ui {
 class LobbyDialog;
@@ -18,13 +20,25 @@ public:
 
 private slots:
     void parseLobbyMessage(const QJsonRpcMessage& message);
-
+    void sendMoved(int id, const QPointF pos);
     void on_pbSend_clicked();
 
 private:
     Ui::LobbyDialog *ui;
     JsonRpcWebSocketClient m_Client;
     QString m_GameName;
+    QGraphicsScene *m_Scene;
+};
+
+class MyPixmapItem : public QObject, public QGraphicsPixmapItem
+{
+    Q_OBJECT
+public:
+    MyPixmapItem(const QPixmap& pixmap) : QGraphicsPixmapItem(pixmap) {}
+signals:
+    void moved(int id, const QPointF& value);
+protected:
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 };
 
 #endif // LOBBYDIALOG_H
