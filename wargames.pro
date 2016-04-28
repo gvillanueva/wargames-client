@@ -24,7 +24,7 @@ SOURCES += src/main.cpp\
     src/ui/creategamedialog.cpp \
     src/jsonrpc/jsonrpcwebsocketclient.cpp \
     src/ui/lobbydialog.cpp \
-    src/ui/joingamedialog.cpp
+    src/ui/gamelistdialog.cpp
 
 HEADERS  += \
     src/unit.h \
@@ -38,7 +38,7 @@ HEADERS  += \
     src/ui/creategamedialog.h \
     src/jsonrpc/jsonrpcwebsocketclient.h \
     src/ui/lobbydialog.h \
-    src/ui/joingamedialog.h
+    src/ui/gamelistdialog.h
 
 FORMS    += \
     src/ui/logindialog.ui \
@@ -46,7 +46,7 @@ FORMS    += \
     src/ui/gamedialog.ui \
     src/ui/creategamedialog.ui \
     src/ui/lobbydialog.ui \
-    src/ui/joingamedialog.ui
+    src/ui/gamelistdialog.ui
 
 INCLUDEPATH += $$(QTDIR)/include/qjsonrpc
 

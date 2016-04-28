@@ -1,21 +1,21 @@
-#ifndef JOINGAMEDIALOG_H
-#define JOINGAMEDIALOG_H
+#ifndef GAMELISTDIALOG_H
+#define GAMELISTDIALOG_H
 
 #include <QDialog>
 #include <qjsonrpc/qjsonrpchttpclient.h>
 #include "../gamelistmodel.h"
 
 namespace Ui {
-class JoinGameDialog;
+class GameListDialog;
 }
 
-class JoinGameDialog : public QDialog
+class GameListDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit JoinGameDialog(QWidget *parent = 0);
-    ~JoinGameDialog();
+    explicit GameListDialog(QWidget *parent = 0);
+    ~GameListDialog();
 
 private slots:
     void on_tbToggleFilters_toggled(bool checked);
@@ -24,9 +24,9 @@ private slots:
     void joinGame(const QModelIndex& index);
 
 private:
-    Ui::JoinGameDialog *ui;
+    Ui::GameListDialog *ui;
     GameListModel m_Games;
     QJsonRpcHttpClient m_Client;
 };
 
-#endif // JOINGAMEDIALOG_H
+#endif // GAMELISTDIALOG_H

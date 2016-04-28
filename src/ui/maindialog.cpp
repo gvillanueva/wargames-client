@@ -5,7 +5,7 @@
 #include "gamedialog.h"
 #include <QMessageBox>
 #include "creategamedialog.h"
-#include "joingamedialog.h"
+#include "gamelistdialog.h"
 
 MainDialog::MainDialog(QWidget *parent) :
     QDialog(parent),
@@ -84,6 +84,6 @@ void MainDialog::on_pbCreateGame_clicked()
 
 void MainDialog::on_pbJoinGame_clicked()
 {
-    JoinGameDialog *d = new JoinGameDialog;
+    GameListDialog *d = new GameListDialog;
     d->exec();
 }

@@ -1,12 +1,12 @@
-#include "joingamedialog.h"
-#include "ui_joingamedialog.h"
+#include "gamelistdialog.h"
+#include "ui_gamelistdialog.h"
 #include "../user.h"
 #include <QMessageBox>
 #include "lobbydialog.h"
 
-JoinGameDialog::JoinGameDialog(QWidget *parent) :
+GameListDialog::GameListDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::JoinGameDialog),
+    ui(new Ui::GameListDialog),
     m_Client("http://localhost:8000", this)
 {
     ui->setupUi(this);
@@ -18,18 +18,18 @@ JoinGameDialog::JoinGameDialog(QWidget *parent) :
     sendListGamesRequest();
 }
 
-JoinGameDialog::~JoinGameDialog()
+GameListDialog::~GameListDialog()
 {
     delete ui;
 }
 
-void JoinGameDialog::on_tbToggleFilters_toggled(bool checked)
+void GameListDialog::on_tbToggleFilters_toggled(bool checked)
 {
     ui->qwFilters->setVisible(checked);
     ui->tbToggleFilters->setText(checked ? "-" : "+");
 }
 
-void JoinGameDialog::sendListGamesRequest()
+void GameListDialog::sendListGamesRequest()
 {
     // Set up JSON-RPC parameters
     QJsonObject userObj;
@@ -46,7 +46,7 @@ void JoinGameDialog::sendListGamesRequest()
     m_Client.sendMessage(message);
 }
 
-void JoinGameDialog::processListGamesResponse(const QJsonRpcMessage& response)
+void GameListDialog::processListGamesResponse(const QJsonRpcMessage& response)
 {
     if (response.errorCode() != QJsonRpc::NoError) {
         QMessageBox::critical(this, "Game list error", response.errorMessage());
@@ -73,7 +73,7 @@ void JoinGameDialog::processListGamesResponse(const QJsonRpcMessage& response)
     }
 }
 
-void JoinGameDialog::joinGame(const QModelIndex& index)
+void GameListDialog::joinGame(const QModelIndex& index)
 {
     QString gameName = m_Games.index(index.row(), 0, QModelIndex()).data().toString();
     LobbyDialog *lobby = new LobbyDialog(gameName);
