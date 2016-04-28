@@ -55,3 +55,6 @@ unix:LIBS += -lqjsonrpc
 
 RESOURCES += \
     chess.qrc
+
+DISTFILES += \
+    src/install/main.nsi
