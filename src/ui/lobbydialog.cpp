@@ -38,24 +38,6 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     connect(&m_Client, SIGNAL(notificationReceived(QJsonRpcMessage)),
             this, SLOT(parseLobbyMessage(QJsonRpcMessage)));
 
-    for (int c = 0; c < 8; c++)
-    {
-        MyPixmapItem *wPawn = new MyPixmapItem(QPixmap(":/chess/images/wPawn.bmp"));
-        wPawn->setPos(SQ_SIZE * c + (SQ_SIZE - wPawn->boundingRect().width()) / 2, 0);
-        wPawn->setFlag(QGraphicsItem::ItemIsMovable);
-        wPawn->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-        wPawn->setData(0, QString::number(c));
-        MyPixmapItem *bPawn = new MyPixmapItem(QPixmap(":/chess/images/bPawn.bmp"));
-        bPawn->setPos(SQ_SIZE * c + (SQ_SIZE - wPawn->boundingRect().width()) / 2, 40);
-        bPawn->setFlag(QGraphicsItem::ItemIsMovable);
-        bPawn->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-        bPawn->setData(0, QString::number(8 + c));
-        m_Scene->addItem(wPawn);
-        m_Scene->addItem(bPawn);
-        connect(wPawn, SIGNAL(moved(int, QPointF)), this, SLOT(sendMoved(int,QPointF)));
-        connect(bPawn, SIGNAL(moved(int, QPointF)), this, SLOT(sendMoved(int,QPointF)));
-    }
-
     ui->graphicsView->setScene(m_Scene);
 }
 
