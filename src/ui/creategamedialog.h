@@ -20,6 +20,8 @@ public slots:
     virtual void accept();
 
 private slots:
+    void sendListSystemsRequest();
+    void processListSystemsResponse();
     void processCreateRequest();
 
 private:

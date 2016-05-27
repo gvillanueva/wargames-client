@@ -15,6 +15,8 @@ CreateGameDialog::CreateGameDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->bbButtons, SIGNAL(accepted()), this, SLOT(accept()));
+
+    sendListSystemsRequest();
 }
 
 CreateGameDialog::~CreateGameDialog()
@@ -33,11 +35,48 @@ void CreateGameDialog::accept()
     QJsonObject gameObj;
     gameObj.insert("name", ui->leRoomName->text());
     gameObj.insert("maxUsers", ui->sbMaxPlayers->value());
+    gameObj.insert("system", ui->cmbSystem->currentText());
     QJsonArray createParams = QJsonArray() << userObj << gameObj;
 
-    QJsonRpcMessage request = QJsonRpcMessage::createRequest("create", createParams);
+    QJsonRpcMessage request = QJsonRpcMessage::createRequest("Game.create", createParams);
     QJsonRpcServiceReply *reply = m_Client.sendMessage(request);
     connect(reply, SIGNAL(finished()), this, SLOT(processCreateRequest()));
+}
+
+void CreateGameDialog::sendListSystemsRequest()
+{
+    // Request list of installed game systems
+    QJsonRpcMessage request = QJsonRpcMessage::createRequest("Game.listSystems", QJsonValue());
+    QJsonRpcServiceReply *response = m_Client.sendMessage(request);
+    connect(response, SIGNAL(finished()), this, SLOT(processListSystemsResponse()));
+}
+
+void CreateGameDialog::processListSystemsResponse()
+{
+    QJsonRpcServiceReply* reply = qobject_cast<QJsonRpcServiceReply*>(QObject::sender());
+    QJsonRpcMessage response = reply->response();
+    if (response.errorCode() != QJsonRpc::NoError) {
+        QMessageBox::critical(this, "System list error", response.errorMessage());
+        return;
+    }
+
+    // Ensure result is an array of game objects
+    if (response.result().isArray())
+    {
+        // Convert value to array, and parse game objects from it
+        QJsonArray jsonArray = response.result().toArray();
+        QStringList systemList;
+
+        foreach(const QJsonValue& jsonValue, jsonArray)
+            if (jsonValue.isString())
+                systemList.append(jsonValue.toString());
+
+        // Create a model and set it's view
+        ui->cmbSystem->addItems(systemList);
+    } else {
+        QMessageBox::critical(this, "System list error", "Response result formatted improperly");
+        return;
+    }
 }
 
 void CreateGameDialog::processCreateRequest()

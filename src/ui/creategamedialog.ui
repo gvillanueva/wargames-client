@@ -7,45 +7,24 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>93</height>
+    <height>119</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Create game</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblRoomName">
-     <property name="text">
-      <string>Room name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLineEdit" name="leRoomName"/>
-   </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="lblMaxPlayers">
      <property name="text">
       <string>Maximum players</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <widget class="QDialogButtonBox" name="bbButtons">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
+   <item row="0" column="1" colspan="2">
+    <widget class="QLineEdit" name="leRoomName"/>
    </item>
-   <item row="1" column="2">
-    <widget class="QSpinBox" name="sbMaxPlayers">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <spacer name="hsMaxPlayers">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -57,6 +36,37 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lblRoomName">
+     <property name="text">
+      <string>Room name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QSpinBox" name="sbMaxPlayers">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QDialogButtonBox" name="bbButtons">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QComboBox" name="cmbSystem"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lblSystem">
+     <property name="text">
+      <string>Game system</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
