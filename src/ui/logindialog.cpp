@@ -56,14 +56,13 @@ void LoginDialog::accept()
     m_Settings.setValue("rememberLastUser", ui->chkLastUser->isChecked());
 
     // Set up JSON-RPC parameters
-    QJsonArray loginParams;
-    QJsonObject loginObj;
-    loginObj.insert("name", ui->txtUsername->text());
-    loginObj.insert("password", ui->txtPassword->text());
-    loginParams.insert(0, loginObj);
+    QJsonObject user;
+    user.insert("name", ui->txtUsername->text());
+    user.insert("password", ui->txtPassword->text());
+    QJsonArray params = QJsonArray() << user;
 
     // Attempt to log in
-    QJsonRpcMessage message = QJsonRpcMessage::createRequest("login", loginParams);
+    QJsonRpcMessage message = QJsonRpcMessage::createRequest("User.login", params);
     QJsonRpcServiceReply *reply = m_Client.sendMessage(message);
     connect(reply, SIGNAL(finished()), this, SLOT(processReply()));
 }
