@@ -39,7 +39,7 @@ void MainDialog::sendListGamesRequest()
     QJsonArray listGamesParams = QJsonArray() << userObj << filterObj;
 
     // Attempt to log in
-    QJsonRpcMessage message = QJsonRpcMessage::createRequest("listGames", listGamesParams);
+    QJsonRpcMessage message = QJsonRpcMessage::createRequest("Game.listGames", listGamesParams);
     m_Client.sendMessage(message);
 }
 
