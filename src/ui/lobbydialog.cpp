@@ -35,6 +35,7 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     gameObj.insert("name", gameName);
     QJsonArray connectParams = QJsonArray() << userObj << gameObj;
 
+    // Make a request to join the game/subscribe to its events
     QJsonRpcMessage request = QJsonRpcMessage::createRequest("Game.join", connectParams);
     m_Client.openBlocking();
     m_Client.sendMessage(request);
@@ -46,12 +47,19 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     ui->graphicsView->setScene(m_Scene);
 }
 
+/*!
+ * \brief Destroys this LobbyDialog instance.
+ */
 LobbyDialog::~LobbyDialog()
 {
     m_Client.close();
     delete ui;
 }
 
+/*!
+ * \brief Entry point to game events.
+ * \param message The JSON-RPC response message.
+ */
 void LobbyDialog::parseLobbyMessage(const QJsonRpcMessage& message)
 {
     qDebug() << message << message.method();
@@ -60,16 +68,28 @@ void LobbyDialog::parseLobbyMessage(const QJsonRpcMessage& message)
     (this->*m_Handlers[message.method()])(message);
 }
 
+/*!
+ * \brief Handles the user joined game event.
+ * \param message The JSON-RPC response message.
+ */
 void LobbyDialog::joined(const QJsonRpcMessage &message)
 {
     qDebug() << message.result().toString();
 }
 
+/*!
+ * \brief Handles the user left game event.
+ * \param message The JSON-RPC response message.
+ */
 void LobbyDialog::left(const QJsonRpcMessage &message)
 {
     qDebug() << message.result().toString();
 }
 
+/*!
+ * \brief Handles the chatted game event.
+ * \param message The JSON-RPC response message.
+ */
 void LobbyDialog::chatted(const QJsonRpcMessage &message)
 {
     if (message.result().isObject())
@@ -85,6 +105,10 @@ void LobbyDialog::chatted(const QJsonRpcMessage &message)
     ui->teHistory->append(msg);
 }
 
+/*!
+ * \brief Handles the moved game event.
+ * \param message The JSON-RPC response message.
+ */
 void LobbyDialog::moved(const QJsonRpcMessage &message)
 {
     QJsonArray params = message.params().toArray();
@@ -105,8 +129,14 @@ void LobbyDialog::moved(const QJsonRpcMessage &message)
     qDebug() << message.result().toString();
 }
 
+/*!
+ * \brief Transmits a movement message to the server.
+ * \param id The id of the unit being moved.
+ * \param pos The proposed new position of the unit.
+ */
 void LobbyDialog::sendMoved(int id, const QPointF pos)
 {
+    // Construct the JSON-RPC parameters
     QJsonObject userObj;
     userObj.insert("authToken", User::instance().authToken());
     QJsonObject gameObj;
@@ -122,8 +152,12 @@ void LobbyDialog::sendMoved(int id, const QPointF pos)
     m_Client.sendMessage(message);
 }
 
+/*!
+ * \brief Sends a chat message to the server.
+ */
 void LobbyDialog::on_pbSend_clicked()
 {
+    // Construct the JSON-RPC parameters
     QJsonObject userObj;
     userObj.insert("name", User::instance().name());
     userObj.insert("authToken", User::instance().authToken());
@@ -134,6 +168,7 @@ void LobbyDialog::on_pbSend_clicked()
     ui->leMessage->clear();
     QJsonArray chatParams = QJsonArray() << userObj << gameObj << messageObj;
 
+    // Make the call (notification)
     QJsonRpcMessage message = QJsonRpcMessage::createRequest("Game.chat", chatParams);
     m_Client.sendMessage(message);
 }
