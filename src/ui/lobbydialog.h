@@ -26,6 +26,7 @@ private slots:
     void left(const QJsonRpcMessage& message);
     void chatted(const QJsonRpcMessage& message);
     void moved(const QJsonRpcMessage& message);
+    void initialState(const QJsonRpcMessage& message);
     void sendMoved(int id, const QPointF pos);
     void on_pbSend_clicked();
 

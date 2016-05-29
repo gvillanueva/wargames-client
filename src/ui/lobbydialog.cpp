@@ -32,6 +32,7 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     m_Handlers["left"] = left;
     m_Handlers["chatted"] = chatted;
     m_Handlers["moved"] = moved;
+    m_Handlers["initialState"] = initialState;
 
     // Configure formatter for chat log
     m_TableFormat.setBorder(0);
@@ -174,7 +175,39 @@ void LobbyDialog::moved(const QJsonRpcMessage &message)
             break;
         }
     }
+}
 
+/*!
+ * \brief Handles the initialState message.
+ * \param message The JSON-RPC request message.
+ */
+void LobbyDialog::initialState(const QJsonRpcMessage& message)
+{
+    if (!message.params().isObject() && !message.params().isArray()) {
+        qWarning() << __func__ << ": unexpected message format: " << message;
+        return;
+    }
+
+    // Read expected parameters
+    QJsonObject obj = message.params().isArray() ?
+                message.params().toArray()[0].toObject() :
+                message.params().toObject();
+    QJsonArray users = obj["users"].toArray();
+    QJsonObject units = obj["units"].toObject();
+
+    // Read array of initially connected users
+    foreach(QJsonValue user, users)
+        ui->lvUsers->addItem(user.toString());
+
+    // Read dictionary of initial units
+    foreach(QJsonValue unitVal, units) {
+        QJsonObject unit = unitVal.toObject();
+        MyPixmapItem *pixmap = new MyPixmapItem(QPixmap(":/chess/image/wPawn.bmp"));
+        pixmap->setPos(unit["x"].toDouble(), unit["y"].toDouble());
+        pixmap->setFlag(QGraphicsItem::ItemIsMovable);
+        pixmap->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+        m_Scene->addItem(pixmap);
+    }
 }
 
 /*!
