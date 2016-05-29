@@ -2,6 +2,7 @@
 #include "ui_lobbydialog.h"
 #include "../user.h"
 #include <QGraphicsPixmapItem>
+#include <QMessageBox>
 #include <QTextTable>
 #include <QScrollBar>
 
@@ -26,6 +27,7 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     m_Scene(0)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     // Configure handlers list
     m_Handlers["joined"] = joined;
@@ -229,8 +231,22 @@ void LobbyDialog::sendMoved(int id, const QPointF pos)
     moveObj.insert("y", pos.y());
     QJsonArray moveParams = QJsonArray() << userObj << gameObj << unitObj << moveObj;
 
+    // Make the call (check for response)
     QJsonRpcMessage message = QJsonRpcMessage::createRequest("Game.move", moveParams);
-    m_Client.sendMessage(message);
+    QJsonRpcServiceReply *response = m_Client.sendMessage(message);
+    connect(response, SIGNAL(finished()), this, SLOT(parseMoveResponse()));
+}
+
+/*!
+ * \brief Checks Game.move responses for errors.
+ * \param message The JSON-RPC response message.
+ * Actual unit movement will occur as part of LobbyDialog::moved.
+ */
+void LobbyDialog::parseMoveResponse(const QJsonRpcMessage& message)
+{
+    if (message.errorCode() == QJsonRpc::NoError)
+        return;
+    QMessageBox::critical(this, "Login error", message.errorMessage());
 }
 
 /*!
