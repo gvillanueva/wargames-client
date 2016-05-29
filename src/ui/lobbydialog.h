@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QHash>
+#include <QTextTableFormat>
 
 namespace Ui {
 class LobbyDialog;
@@ -30,6 +31,7 @@ private slots:
 
 private:
     Ui::LobbyDialog *ui;
+    QTextTableFormat m_TableFormat;
     JsonRpcWebSocketClient m_Client;
     QString m_GameName;
     QGraphicsScene *m_Scene;

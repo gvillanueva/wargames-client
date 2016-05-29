@@ -2,6 +2,8 @@
 #include "ui_lobbydialog.h"
 #include "../user.h"
 #include <QGraphicsPixmapItem>
+#include <QTextTable>
+#include <QScrollBar>
 
 const int SQ_SIZE = 48;
 const int SQ_ROWS = 8;
@@ -31,6 +33,10 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     m_Handlers["chatted"] = chatted;
     m_Handlers["moved"] = moved;
 
+    // Configure formatter for chat log
+    m_TableFormat.setBorder(0);
+
+    // Set up our game scene
     m_Scene = new QGraphicsScene(0, 0, SQ_SIZE * SQ_ROWS, SQ_SIZE * SQ_COLS);
 
     // Set up JSON-RPC parameters
@@ -121,17 +127,31 @@ void LobbyDialog::left(const QJsonRpcMessage &message)
  */
 void LobbyDialog::chatted(const QJsonRpcMessage &message)
 {
-    if (message.result().isObject())
-    {
-        QJsonObject obj = message.result().toObject();
-        QString user = obj["user"].toString();
-        QString text = obj["text"].toString();
-        QString log = QString("%0: %1").arg(user).arg(text);
-        ui->teHistory->insertPlainText(log);
+    if (!message.params().isObject() && !message.params().isArray()) {
+        qWarning() << __func__ << ": unexpected message format: " << message;
+        return;
     }
-    QJsonArray params = message.params().toArray();
-    QString msg = QString("%0:%1").arg(params[0].toString()).arg(params[1].toString());
-    ui->teHistory->append(msg);
+
+    // Convert between by-position/by-name request parameter
+    QJsonObject obj = message.params().isArray() ?
+                message.params().toArray()[0].toObject() :
+                message.params().toObject();
+    QString user = obj["user"].toString();
+    QString text = obj["message"].toString();
+
+    if (user.isEmpty() || text.isEmpty()) {
+        qWarning() << __func__ << ": message contents empty: " << message;
+        return;
+    }
+
+    // Insert chat message into history
+    QTextCursor cursor(ui->teHistory->textCursor());
+    cursor.movePosition(QTextCursor::End);
+    QTextTable *table = cursor.insertTable(1, 2, m_TableFormat);
+    table->cellAt(0, 0).firstCursorPosition().insertText('<' + user + "> ");
+    table->cellAt(0, 1).firstCursorPosition().insertText(text);
+    QScrollBar *bar = ui->teHistory->verticalScrollBar();
+    bar->setValue(bar->maximum());
 }
 
 /*!
