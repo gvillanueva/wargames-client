@@ -12,6 +12,11 @@ void MyPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     emit moved(this->data(0).toInt(), pos());
 }
 
+/*!
+ * \brief Create a new LobbyDialog instance.
+ * \param gameName The name of the game we are joining.
+ * \param parent The parent QWidget object.
+ */
 LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
     QDialog(parent), ui(new Ui::LobbyDialog),
     m_Client("ws://localhost:8000/", this),
@@ -58,37 +63,39 @@ LobbyDialog::~LobbyDialog()
 
 /*!
  * \brief Entry point to game events.
- * \param message The JSON-RPC response message.
+ * \param message The JSON-RPC request message.
  */
 void LobbyDialog::parseLobbyMessage(const QJsonRpcMessage& message)
 {
-    qDebug() << message << message.method();
-
     // Call the method appropriate for handling the message
+    if (!m_Handlers.contains(message.method())) {
+        qCritical() << "Received unknown method: " << message.method() << message;
+        return;
+    }
+
+    // Call handler for known method
     (this->*m_Handlers[message.method()])(message);
 }
 
 /*!
  * \brief Handles the user joined game event.
- * \param message The JSON-RPC response message.
+ * \param message The JSON-RPC request message.
  */
 void LobbyDialog::joined(const QJsonRpcMessage &message)
 {
-    qDebug() << message.result().toString();
 }
 
 /*!
  * \brief Handles the user left game event.
- * \param message The JSON-RPC response message.
+ * \param message The JSON-RPC request message.
  */
 void LobbyDialog::left(const QJsonRpcMessage &message)
 {
-    qDebug() << message.result().toString();
 }
 
 /*!
  * \brief Handles the chatted game event.
- * \param message The JSON-RPC response message.
+ * \param message The JSON-RPC request message.
  */
 void LobbyDialog::chatted(const QJsonRpcMessage &message)
 {
@@ -107,7 +114,7 @@ void LobbyDialog::chatted(const QJsonRpcMessage &message)
 
 /*!
  * \brief Handles the moved game event.
- * \param message The JSON-RPC response message.
+ * \param message The JSON-RPC request message.
  */
 void LobbyDialog::moved(const QJsonRpcMessage &message)
 {
@@ -126,7 +133,6 @@ void LobbyDialog::moved(const QJsonRpcMessage &message)
         }
     }
 
-    qDebug() << message.result().toString();
 }
 
 /*!
