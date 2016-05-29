@@ -83,6 +83,28 @@ void LobbyDialog::parseLobbyMessage(const QJsonRpcMessage& message)
  */
 void LobbyDialog::joined(const QJsonRpcMessage &message)
 {
+    if (!message.params().isObject() && !message.params().isArray()) {
+        qWarning() << __func__ << ": unexpected message format: " << message;
+        return;
+    }
+
+    // Convert between by-position/by-name request parameter
+    QJsonObject obj = message.params().isArray() ?
+                message.params().toArray()[0].toObject() :
+                message.params().toObject();
+    QString name = obj["name"].toString();
+    QString id = obj["id"].toString();
+
+    if (name.isEmpty() || id.isEmpty()) {
+        qWarning() << __func__ << ": message contents empty: " << message;
+        return;
+    }
+
+    QColor color = ui->teHistory->textColor();
+    ui->teHistory->setTextColor(Qt::gray);
+    ui->teHistory->append(tr("* %1 has joined").arg(name));
+    ui->teHistory->setTextColor(color);
+    ui->lvUsers->addItem(name);
 }
 
 /*!
