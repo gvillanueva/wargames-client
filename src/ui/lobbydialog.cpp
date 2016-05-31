@@ -6,10 +6,6 @@
 #include <QTextTable>
 #include <QScrollBar>
 
-const int SQ_SIZE = 48;
-const int SQ_ROWS = 8;
-const int SQ_COLS = 8;
-
 void MyPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     emit moved(this->data(0).toInt(), pos());
@@ -38,9 +34,7 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
 
     // Configure formatter for chat log
     m_TableFormat.setBorder(0);
-
-    // Set up our game scene
-    m_Scene = new QGraphicsScene(0, 0, SQ_SIZE * SQ_ROWS, SQ_SIZE * SQ_COLS);
+    m_Scene = new QGraphicsScene(this);
 
     // Set up JSON-RPC parameters
     QJsonObject userObj;
@@ -231,16 +225,22 @@ void LobbyDialog::initialState(const QJsonRpcMessage& message)
                 message.params().toArray()[0].toObject() :
                 message.params().toObject();
     QJsonArray users = obj["users"].toArray();
+    QJsonObject bounds = obj["bounds"].toObject();
     QJsonObject units = obj["units"].toObject();
 
     // Read array of initially connected users
     foreach(QJsonValue user, users)
         ui->lvUsers->addItem(user.toString());
 
+    // Set up our game scene
+    QRectF sceneBounds(bounds["x"].toDouble(), bounds["y"].toDouble(),
+                  bounds["w"].toDouble(), bounds["h"].toDouble());
+    m_Scene->setSceneRect(sceneBounds);
+
     // Read dictionary of initial units
     foreach(QJsonValue unitVal, units) {
         QJsonObject unit = unitVal.toObject();
-        MyPixmapItem *pixmap = new MyPixmapItem(QPixmap(":/chess/image/wPawn.bmp"));
+        MyPixmapItem *pixmap = new MyPixmapItem(QPixmap(":/chess/images/wPawn.bmp"));
         pixmap->setPos(unit["x"].toDouble(), unit["y"].toDouble());
         pixmap->setFlag(QGraphicsItem::ItemIsMovable);
         pixmap->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
