@@ -15,6 +15,7 @@ CreateGameDialog::CreateGameDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->bbButtons, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(ui->bbButtons, SIGNAL(rejected()), this, SLOT(reject()));
 
     sendListSystemsRequest();
 }
