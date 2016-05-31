@@ -13,4 +13,8 @@
         <file>images/wQueen.bmp</file>
         <file>images/wRook.bmp</file>
     </qresource>
+    <qresource prefix="/checkers">
+        <file>images/bMan.bmp</file>
+        <file>images/wMan.bmp</file>
+    </qresource>
 </RCC>

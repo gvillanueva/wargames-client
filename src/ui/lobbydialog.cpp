@@ -240,7 +240,7 @@ void LobbyDialog::initialState(const QJsonRpcMessage& message)
     // Read dictionary of initial units
     foreach(QJsonValue unitVal, units) {
         QJsonObject unit = unitVal.toObject();
-        MyPixmapItem *pixmap = new MyPixmapItem(QPixmap(":/chess/images/wPawn.bmp"));
+        MyPixmapItem *pixmap = new MyPixmapItem(QPixmap(unit["image"].toString()));
         pixmap->setPos(unit["x"].toDouble(), unit["y"].toDouble());
         pixmap->setFlag(QGraphicsItem::ItemIsMovable);
         pixmap->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
