@@ -226,6 +226,7 @@ void LobbyDialog::initialState(const QJsonRpcMessage& message)
                 message.params().toObject();
     QJsonArray users = obj["users"].toArray();
     QJsonObject bounds = obj["bounds"].toObject();
+    QString bgImagePath = obj["background"].toString();
     QJsonObject units = obj["units"].toObject();
 
     // Read array of initially connected users
@@ -236,6 +237,9 @@ void LobbyDialog::initialState(const QJsonRpcMessage& message)
     QRectF sceneBounds(bounds["x"].toDouble(), bounds["y"].toDouble(),
                   bounds["w"].toDouble(), bounds["h"].toDouble());
     m_Scene->setSceneRect(sceneBounds);
+
+    if (!bgImagePath.isEmpty())
+        m_Scene->addPixmap(QPixmap(bgImagePath));
 
     // Read dictionary of initial units
     foreach(QJsonValue unitVal, units) {
