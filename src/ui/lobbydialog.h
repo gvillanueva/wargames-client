@@ -22,7 +22,7 @@ public:
 
 private slots:
     void parseLobbyMessage(const QJsonRpcMessage& message);
-    void parseMoveResponse(const QJsonRpcMessage& message);
+    void parseMoveResponse();
     void joined(const QJsonRpcMessage& message);
     void left(const QJsonRpcMessage& message);
     void chatted(const QJsonRpcMessage& message);

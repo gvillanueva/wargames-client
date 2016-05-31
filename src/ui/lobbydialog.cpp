@@ -282,11 +282,17 @@ void LobbyDialog::sendMoved(int id, const QPointF pos)
  * \param message The JSON-RPC response message.
  * Actual unit movement will occur as part of LobbyDialog::moved.
  */
-void LobbyDialog::parseMoveResponse(const QJsonRpcMessage& message)
+void LobbyDialog::parseMoveResponse()
 {
-    if (message.errorCode() == QJsonRpc::NoError)
+    QJsonRpcServiceReply* reply = qobject_cast<QJsonRpcServiceReply*>(QObject::sender());
+    QJsonRpcMessage response = reply->response();
+
+    // HACK: Prevent duplicate signals from QJsonRpcHttpReply (finished/error)
+    disconnect(reply, SIGNAL(finished()), this, SLOT(parseMoveResponse()));
+
+    if (response.errorCode() == QJsonRpc::NoError)
         return;
-    QMessageBox::critical(this, "Login error", message.errorMessage());
+    QMessageBox::critical(this, "Move error", response.errorMessage());
 }
 
 /*!
