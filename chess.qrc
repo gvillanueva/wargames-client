@@ -17,4 +17,7 @@
         <file>images/bMan.bmp</file>
         <file>images/wMan.bmp</file>
     </qresource>
+    <qresource prefix="/">
+        <file>images/board.bmp</file>
+    </qresource>
 </RCC>
