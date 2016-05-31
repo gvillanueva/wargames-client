@@ -66,6 +66,15 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
  */
 LobbyDialog::~LobbyDialog()
 {
+    // Set up JSON-RPC parameters
+    QJsonObject userObj;
+    userObj.insert("authToken", User::instance().authToken());
+    QJsonObject gameObj;
+    gameObj.insert("name", m_GameName);
+    QJsonArray connectParams = QJsonArray() << userObj << gameObj;
+
+    QJsonRpcMessage request = QJsonRpcMessage::createRequest("Game.leave", connectParams);
+    m_Client.sendMessage(request);
     m_Client.close();
     delete ui;
 }
@@ -122,6 +131,33 @@ void LobbyDialog::joined(const QJsonRpcMessage &message)
  */
 void LobbyDialog::left(const QJsonRpcMessage &message)
 {
+    if (!message.params().isObject() && !message.params().isArray()) {
+        qWarning() << __func__ << ": unexpected message format: " << message;
+        return;
+    }
+
+    // Convert between by-position/by-name request parameter
+    QJsonObject obj = message.params().isArray() ?
+                message.params().toArray()[0].toObject() :
+                message.params().toObject();
+    QString name = obj["name"].toString();
+    QString id = obj["id"].toString();
+
+    if (name.isEmpty() || id.isEmpty()) {
+        qWarning() << __func__ << ": message contents empty: " << message;
+        return;
+    }
+
+    QList<QListWidgetItem *> items = ui->lvUsers->findItems(name,
+                                                            Qt::MatchExactly);
+    if (items.isEmpty())
+        return;
+
+    delete items.at(0);
+    QColor color = ui->teHistory->textColor();
+    ui->teHistory->setTextColor(Qt::gray);
+    ui->teHistory->append(tr("* %1 has left").arg(name));
+    ui->teHistory->setTextColor(color);
 }
 
 /*!
