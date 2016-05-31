@@ -193,10 +193,18 @@ void LobbyDialog::chatted(const QJsonRpcMessage &message)
  */
 void LobbyDialog::moved(const QJsonRpcMessage &message)
 {
-    QJsonArray params = message.params().toArray();
-    QJsonObject userObj = params[0].toObject();
-    QJsonObject unitObj = params[1].toObject();
-    QJsonObject moveObj = params[2].toObject();
+    if (!message.params().isObject() && !message.params().isArray()) {
+        qWarning() << __func__ << ": unexpected message format: " << message;
+        return;
+    }
+
+    // Read expected parameters
+    QJsonObject params = message.params().isArray() ?
+                message.params().toArray()[0].toObject() :
+                message.params().toObject();
+    //QJsonObject userObj = params["user"].toObject();
+    QJsonObject unitObj = params["unit"].toObject();
+    QJsonObject moveObj = params["move"].toObject();
 
     foreach(QGraphicsItem* item, m_Scene->items())
     {
