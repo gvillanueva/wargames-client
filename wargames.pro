@@ -48,6 +48,8 @@ FORMS    += \
     src/ui/lobbydialog.ui \
     src/ui/gamelistdialog.ui
 
+RC_FILE = wargames.rc
+
 INCLUDEPATH += $$(QTDIR)/include/qjsonrpc
 
 win32:LIBS += -lqjsonrpc1
