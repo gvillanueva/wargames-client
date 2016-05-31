@@ -74,6 +74,11 @@ void LoginDialog::accept()
 void LoginDialog::processReply()
 {
     QJsonRpcServiceReply* reply = qobject_cast<QJsonRpcServiceReply*>(QObject::sender());
+
+    // HACK: Prevent duplicate signals from QJsonRpcHttpReply (finished/error)
+    disconnect(reply, SIGNAL(finished()), this, SLOT(processReply()));
+
+    // Process login response
     this->setEnabled(true);
     if (reply->response().errorCode() != QJsonRpc::NoError)
         QMessageBox::critical(this, "Login error", reply->response().errorMessage());
