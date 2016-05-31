@@ -1,7 +1,7 @@
 !define $PROGRAM_NAME "Wargames"
 !define $PROGRAM_VERSION "0.0.0.1"
 !define $INSTALLER_VERSION "0.0.0.1"
-!define $COMPANY_NAME "walkingTarget"
+!define $COMPANY_NAME "ADAPT"
 
 Name "$PROGRAM_NAME"
 OutFile "$PROGRAM_NAME.$INSTALLER_VERSION.exe"
