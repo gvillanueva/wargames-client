@@ -242,13 +242,15 @@ void LobbyDialog::initialState(const QJsonRpcMessage& message)
         m_Scene->addPixmap(QPixmap(bgImagePath));
 
     // Read dictionary of initial units
-    foreach(QJsonValue unitVal, units) {
-        QJsonObject unit = unitVal.toObject();
+    foreach(QString key, units.keys()) {
+        QJsonObject unit = units[key].toObject();
         MyPixmapItem *pixmap = new MyPixmapItem(QPixmap(unit["image"].toString()));
         pixmap->setPos(unit["x"].toDouble(), unit["y"].toDouble());
         pixmap->setFlag(QGraphicsItem::ItemIsMovable);
         pixmap->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+        pixmap->setData(0, key);
         m_Scene->addItem(pixmap);
+        connect(pixmap, SIGNAL(moved(int,QPointF)), this, SLOT(sendMoved(int,QPointF)));
     }
 }
 
