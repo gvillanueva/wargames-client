@@ -1,4 +1,4 @@
-!define $PROGRAM_NAME "WarGames"
+!define $PROGRAM_NAME "Wargames"
 !define $PROGRAM_VERSION "0.0.0.1"
 !define $INSTALLER_VERSION "0.0.0.1"
 !define $COMPANY_NAME "walkingTarget"

@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    WarGamesApplication wga(argc, argv);
+    WargamesApplication wga(argc, argv);
 
     // Show login dialog
     LoginDialog ld;

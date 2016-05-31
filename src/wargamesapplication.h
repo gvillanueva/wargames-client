@@ -3,10 +3,10 @@
 
 #include <QApplication>
 
-class WarGamesApplication : public QApplication
+class WargamesApplication : public QApplication
 {
 public:
-    WarGamesApplication(int &argc, char **argv);
+    WargamesApplication(int &argc, char **argv);
 };
 
 #endif // WARGAMESAPPLICATION_H

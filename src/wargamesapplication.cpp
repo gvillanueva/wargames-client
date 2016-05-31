@@ -3,11 +3,11 @@
 #include <QMessageBox>
 #include <QTimer>
 
-WarGamesApplication::WarGamesApplication(int &argc, char **argv) :
+WargamesApplication::WargamesApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {
-    QCoreApplication::setOrganizationName("WarGames");
-    QCoreApplication::setApplicationName("WarGames");
+    QCoreApplication::setOrganizationName("Wargames");
+    QCoreApplication::setApplicationName("Wargames");
     QCoreApplication::setApplicationVersion("0.0.0.1");
 
     if (!QSslSocket::supportsSsl()) {
