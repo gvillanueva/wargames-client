@@ -15,6 +15,7 @@
 
 void MyPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
+    QGraphicsPixmapItem::mouseReleaseEvent(event);
     emit moved(this->data(0).toInt(), pos());
 }
 
