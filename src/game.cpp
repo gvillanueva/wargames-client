@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-14
+ * \file    game.cpp
+ * \brief   Defines the behaviors of a Game object.
+ */
+
 #include "game.h"
 
 Game::Game()

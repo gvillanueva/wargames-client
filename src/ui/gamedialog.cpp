@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    gamedialog.cpp
+ * \brief   Defines the behavior of the Game dialog.
+ */
+
 #include "gamedialog.h"
 #include "ui_gamedialog.h"
 

@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-31
+ * \file    main.cpp
+ * \brief   Entry point into Wargames client application.
+ */
+
 #include "wargamesapplication.h"
 #include "ui/logindialog.h"
 #include "ui/maindialog.h"

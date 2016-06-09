@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-04-27
+ * \file    gamelistdialog.h
+ * \brief   Define the structure of the Game List dialog.
+ */
+
 #ifndef GAMELISTDIALOG_H
 #define GAMELISTDIALOG_H
 

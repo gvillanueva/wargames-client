@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-31
+ * \file    lobbydialog.h
+ * \brief   Defines the structure of the Lobby dialog.
+ */
+
 #ifndef LOBBYDIALOG_H
 #define LOBBYDIALOG_H
 

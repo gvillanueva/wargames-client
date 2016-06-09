@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-13
+ * \file    jsonrpcwebsocketclient.h
+ * \brief   Defines the structure of a Websocket-based, QJsonRpc client.
+ */
+
 #ifndef JSONRPCWEBSOCKETCLIENT_H
 #define JSONRPCWEBSOCKETCLIENT_H
 

@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-27
+ * \file    creategamedialog.h
+ * \brief   Defines the structure for a Create Game dialog.
+ */
+
 #ifndef CREATEGAMEDIALOG_H
 #define CREATEGAMEDIALOG_H
 

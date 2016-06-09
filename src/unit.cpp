@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    unit.cpp
+ * \brief   Defines the behavior of Unit objects.
+ */
+
 #include "unit.h"
 #include <QVector3D>
 #include <qjsonrpc/qjsonrpcmessage.h>

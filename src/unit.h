@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    unit.h
+ * \brief   Defines the structure of a Unit object.
+ */
+
 #ifndef UNIT_H
 #define UNIT_H
 

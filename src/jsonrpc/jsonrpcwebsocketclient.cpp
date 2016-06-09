@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-13
+ * \file    jsonrpcwebsocketclient.cpp
+ * \brief   Defines the behavior of a Websocket-based, QJsonRpc client.
+ */
+
 #include <QEventLoop>
 #include <QTimer>
 #include <QtWebSockets/QWebSocket>

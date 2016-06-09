@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    gamedialog.h
+ * \brief   Defines the structure of the Game dialog.
+ */
+
 #ifndef GAMEDIALOG_H
 #define GAMEDIALOG_H
 

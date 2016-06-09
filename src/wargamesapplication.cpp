@@ -1,8 +1,20 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-31
+ * \file    wargamesapplication.cpp
+ * \brief   Defines the behavior of the Wargames QApplication subclass.
+ */
+
 #include "wargamesapplication.h"
 #include <QSslSocket>
 #include <QMessageBox>
 #include <QTimer>
 
+/*!
+ * \brief WargamesApplication::WargamesApplication
+ * \param argc
+ * \param argv
+ */
 WargamesApplication::WargamesApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {

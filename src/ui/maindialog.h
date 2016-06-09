@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-14
+ * \file    maindialog.h
+ * \brief   Defines the structure of the Main dialog.
+ */
+
 #ifndef MAINDIALOG_H
 #define MAINDIALOG_H
 

@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    user.cpp
+ * \brief   Defines the behavior of a User object.
+ */
+
 #include "user.h"
 
 User::User()

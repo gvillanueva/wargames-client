@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    user.h
+ * \brief   Defines the structure of a User object.
+ */
+
 #ifndef USER_H
 #define USER_H
 

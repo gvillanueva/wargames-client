@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-31
+ * \file    creategamedialog.cpp
+ * \brief   Defines the behavior for a Create Game dialog.
+ */
+
 #include "creategamedialog.h"
 #include "ui_creategamedialog.h"
 #include "../user.h"

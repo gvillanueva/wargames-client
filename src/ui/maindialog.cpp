@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-27
+ * \file    maindialog.cpp
+ * \brief   Defines the behavior of the Main dialog.
+ */
+
 #include "maindialog.h"
 #include "ui_maindialog.h"
 #include "../user.h"

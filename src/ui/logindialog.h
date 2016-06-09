@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-13
+ * \file    logindialog.h
+ * \brief   Defines the structure of the Login dialog.
+ */
+
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 

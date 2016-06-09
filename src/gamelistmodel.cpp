@@ -1,3 +1,11 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-14
+ * \file    gamelistmodel.h
+ * \brief   Implements the abstract methods of QAbstractTableModel for Game
+ *          objects.
+ */
+
 #include "gamelistmodel.h"
 
 GameListModel::GameListModel(QObject *parent) :

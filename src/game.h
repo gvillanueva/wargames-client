@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-14
+ * \file    game.h
+ * \brief   Defines the structure of a Game object.
+ */
+
 #ifndef GAME_H
 #define GAME_H
 

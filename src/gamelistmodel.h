@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-03-09
+ * \file    gamelistmodel.h
+ * \brief   Subclasses QAbstractTableModel for Game objects.
+ */
+
 #ifndef GAMELISTMODEL_H
 #define GAMELISTMODEL_H
 

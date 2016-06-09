@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-27
+ * \file    gamelistdialog.cpp
+ * \brief   Define the behavior of the Game list dialog.
+ */
+
 #include "gamelistdialog.h"
 #include "ui_gamelistdialog.h"
 #include "../user.h"

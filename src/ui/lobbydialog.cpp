@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-31
+ * \file    lobbydialog.cpp
+ * \brief   Define the behavior of the Lobby dialog.
+ */
+
 #include "lobbydialog.h"
 #include "ui_lobbydialog.h"
 #include "../user.h"

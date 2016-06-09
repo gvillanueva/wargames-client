@@ -1,3 +1,10 @@
+/*!
+ * \author  Giancarlo Villanueva
+ * \date    2016-05-31
+ * \file    logindialog.cpp
+ * \brief   Defines the behavior of the Login dialog.
+ */
+
 #include "logindialog.h"
 #include "ui_logindialog.h"
 #include "../user.h"
