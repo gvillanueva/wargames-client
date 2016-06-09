@@ -32,6 +32,7 @@ LobbyDialog::LobbyDialog(const QString& gameName, QWidget *parent) :
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle(QString("Wargames - %0").arg(gameName));
 
     // Configure handlers list
     m_Handlers["joined"] = joined;
