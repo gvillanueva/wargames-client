@@ -11,6 +11,9 @@
 #include <QJsonObject>
 #include <QUuid>
 
+/*!
+ * \brief The Game class is a model containing Game information.
+ */
 class Game
 {
 public:

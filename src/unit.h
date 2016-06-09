@@ -14,6 +14,9 @@
 #include <QJsonObject>
 #include <qjsonrpc/qjsonrpchttpclient.h>
 
+/*!
+ * \brief The Unit class defines a model to contain Unit information.
+ */
 class Unit : public QObject
 {
     Q_OBJECT

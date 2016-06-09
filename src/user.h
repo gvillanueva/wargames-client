@@ -10,6 +10,9 @@
 
 #include <QString>
 
+/*!
+ * \brief The User class defines a model to contain User information.
+ */
 class User
 {
 public:

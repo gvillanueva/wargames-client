@@ -16,6 +16,10 @@ namespace Ui {
 class MainDialog;
 }
 
+/*!
+ * \brief The MainDialog class provides the interface for creating, joining, and
+ *        listing the user's current games.
+ */
 class MainDialog : public QDialog
 {
     Q_OBJECT

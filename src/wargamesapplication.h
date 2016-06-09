@@ -10,6 +10,10 @@
 
 #include <QApplication>
 
+/*!
+ * \brief The WargamesApplication class subclasses QApplication to provide
+ *        specific behavior for a Wargames client.
+ */
 class WargamesApplication : public QApplication
 {
 public:

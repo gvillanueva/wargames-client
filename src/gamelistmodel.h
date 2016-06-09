@@ -11,6 +11,10 @@
 #include <QAbstractTableModel>
 #include "game.h"
 
+/*!
+ * \brief The GameListModel class subclasses QAbstractTableModel to provide a
+ *        list of Games in a QAbstractItemView.
+ */
 class GameListModel : public QAbstractTableModel
 {
 public:

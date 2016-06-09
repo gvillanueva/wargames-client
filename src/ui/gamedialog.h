@@ -16,6 +16,10 @@ namespace Ui {
 class GameDialog;
 }
 
+/*!
+ * \brief The GameDialog class provides an interface for displaying the game
+ *        state.
+ */
 class GameDialog : public QDialog
 {
     Q_OBJECT

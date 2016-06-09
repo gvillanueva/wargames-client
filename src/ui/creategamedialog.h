@@ -15,6 +15,10 @@ namespace Ui {
 class CreateGameDialog;
 }
 
+/*!
+ * \brief The CreateGameDialog class provides the interface for selecting
+ *        parameters to create a new game.
+ */
 class CreateGameDialog : public QDialog
 {
     Q_OBJECT

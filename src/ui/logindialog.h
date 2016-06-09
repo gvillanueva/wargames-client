@@ -16,6 +16,9 @@ namespace Ui {
 class LoginDialog;
 }
 
+/*!
+ * \brief The LoginDialog class provides the interface for user authentication.
+ */
 class LoginDialog : public QDialog
 {
     Q_OBJECT

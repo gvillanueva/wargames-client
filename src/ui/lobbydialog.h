@@ -19,6 +19,10 @@ namespace Ui {
 class LobbyDialog;
 }
 
+/*!
+ * \brief The LobbyDialog class provides the chatroom interface and the gameplay
+ *        scene.
+ */
 class LobbyDialog : public QDialog
 {
     Q_OBJECT

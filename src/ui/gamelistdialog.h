@@ -16,6 +16,10 @@ namespace Ui {
 class GameListDialog;
 }
 
+/*!
+ * \brief The GameListDialog class provides the interface for searching through
+ *        existing games.
+ */
 class GameListDialog : public QDialog
 {
     Q_OBJECT
