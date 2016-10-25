@@ -7,8 +7,8 @@
 
 #include "maindialog.h"
 #include "ui_maindialog.h"
-#include "../user.h"
-#include "../game.h"
+#include "user.h"
+#include "game.h"
 #include "gamedialog.h"
 #include <QMessageBox>
 #include "creategamedialog.h"

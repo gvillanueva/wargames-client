@@ -13,30 +13,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    unit.cpp \
     ui/logindialog.cpp \
     wargamesapplication.cpp \
-    user.cpp \
     ui/maindialog.cpp \
-    game.cpp \
-    gamelistmodel.cpp \
     ui/gamedialog.cpp \
     ui/creategamedialog.cpp \
-    jsonrpc/jsonrpcwebsocketclient.cpp \
     ui/lobbydialog.cpp \
     ui/gamelistdialog.cpp
 
 HEADERS  += \
-    unit.h \
     ui/logindialog.h \
     wargamesapplication.h \
-    user.h \
     ui/maindialog.h \
-    game.h \
-    gamelistmodel.h \
     ui/gamedialog.h \
     ui/creategamedialog.h \
-    jsonrpc/jsonrpcwebsocketclient.h \
     ui/lobbydialog.h \
     ui/gamelistdialog.h
 
@@ -50,13 +40,19 @@ FORMS    += \
 
 RC_FILE = wargames.rc
 
-INCLUDEPATH += $$(QTDIR)/include/qjsonrpc
-
-win32:LIBS += -lqjsonrpc1
-unix:LIBS += -lqjsonrpc
-
 RESOURCES += \
     chess.qrc
 
 DISTFILES += \
     install/main.nsi
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../libwargames/release/ -llibwargames
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../libwargames/debug/ -llibwargames
+else:unix: LIBS += -L$$OUT_PWD/../libwargames/ -llibwargames
+
+INCLUDEPATH += $$PWD/../libwargames
+INCLUDEPATH += $$[QT_INSTALL_PREFIX]/include/qjsonrpc
+DEPENDPATH += $$PWD/../libwargames
+win32:LIBS += -lqjsonrpc1
+unix:LIBS += -lqjsonrpc
+

@@ -9,7 +9,7 @@
 #define LOBBYDIALOG_H
 
 #include <QDialog>
-#include "../jsonrpc/jsonrpcwebsocketclient.h"
+#include "jsonrpc/jsonrpcwebsocketclient.h"
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QHash>

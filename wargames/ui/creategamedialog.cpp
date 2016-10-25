@@ -7,7 +7,7 @@
 
 #include "creategamedialog.h"
 #include "ui_creategamedialog.h"
-#include "../user.h"
+#include "user.h"
 #include <QMessageBox>
 
 #include "lobbydialog.h"

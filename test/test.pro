@@ -18,7 +18,7 @@ INCLUDEPATH += \
     $$GTEST_PATH \
     $$GTEST_PATH/googletest/include \
     $$GTEST_PATH/googlemock/include \
-    ../src
+    ../libwargames
 
 LIBS += \
     -L$$GTEST_PATH/bin -lgoogletest

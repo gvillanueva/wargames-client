@@ -7,7 +7,7 @@
 
 #include "gamelistdialog.h"
 #include "ui_gamelistdialog.h"
-#include "../user.h"
+#include "user.h"
 #include <QMessageBox>
 #include "lobbydialog.h"
 

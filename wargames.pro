@@ -2,6 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     wargames \
-    test
+    test \
+    libwargames
 
-test.depends = wargames
+test.depends = wargames libwargames
+wargames.depends = libwargames

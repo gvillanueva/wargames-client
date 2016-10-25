@@ -7,7 +7,7 @@
 
 #include "lobbydialog.h"
 #include "ui_lobbydialog.h"
-#include "../user.h"
+#include "user.h"
 #include <QGraphicsPixmapItem>
 #include <QMessageBox>
 #include <QTextTable>

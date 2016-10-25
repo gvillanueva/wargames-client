@@ -7,7 +7,7 @@
 
 #include "logindialog.h"
 #include "ui_logindialog.h"
-#include "../user.h"
+#include "user.h"
 #include <QMessageBox>
 #include <QDesktopServices>
 
