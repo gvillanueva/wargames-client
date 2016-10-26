@@ -8,8 +8,6 @@
 #include "wargamesapplication.h"
 #include "ui/logindialog.h"
 #include "ui/maindialog.h"
-#include <QSslSocket>
-#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {

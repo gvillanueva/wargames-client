@@ -25,7 +25,6 @@ LoginDialog::LoginDialog(QWidget *parent) :
     // Configure the dialog window
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->txtPassword->setEchoMode(QLineEdit::Password);
 
     // Connect the buttons
     connect(ui->pbLogin, SIGNAL(clicked(bool)), this, SLOT(accept()));
