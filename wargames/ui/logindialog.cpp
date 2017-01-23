@@ -7,6 +7,7 @@
 
 #include "logindialog.h"
 #include "ui_logindialog.h"
+#include "login.h"
 #include "user.h"
 #include <QMessageBox>
 #include <QDesktopServices>
@@ -17,8 +18,7 @@
  */
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::LoginDialog),
-    m_Client("http://localhost:8000", this)
+    ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
 
@@ -61,16 +61,9 @@ void LoginDialog::accept()
         m_Settings.setValue("lastUser", QString());
     m_Settings.setValue("rememberLastUser", ui->chkLastUser->isChecked());
 
-    // Set up JSON-RPC parameters
-    QJsonObject user;
-    user.insert("name", ui->txtUsername->text());
-    user.insert("password", ui->txtPassword->text());
-    QJsonArray params = QJsonArray() << user;
-
-    // Attempt to log in
-    QJsonRpcMessage message = QJsonRpcMessage::createRequest("User.login", params);
-    QJsonRpcServiceReply *reply = m_Client.sendMessage(message);
-    connect(reply, SIGNAL(finished()), this, SLOT(processReply()));
+    wargames::LoginRequest req(ui->txtUsername->text(), ui->txtPassword->text());
+    wargames::LoginResponse *res = req.send();
+    connect(res, SIGNAL(finished()), this, SLOT(processReply()));
 }
 
 /*!
@@ -79,20 +72,18 @@ void LoginDialog::accept()
  */
 void LoginDialog::processReply()
 {
-    QJsonRpcServiceReply* reply = qobject_cast<QJsonRpcServiceReply*>(QObject::sender());
-
-    // HACK: Prevent duplicate signals from QJsonRpcHttpReply (finished/error)
-    disconnect(reply, SIGNAL(finished()), this, SLOT(processReply()));
+    wargames::LoginResponse* res = qobject_cast<wargames::LoginResponse*>(sender());
 
     // Process login response
     this->setEnabled(true);
-    if (reply->response().errorCode() != QJsonRpc::NoError)
-        QMessageBox::critical(this, "Login error", reply->response().errorMessage());
+    if (res->hasError())
+        QMessageBox::critical(this, "Login error", "UH OH");
     else {
         User::instance().setName(ui->txtUsername->text());
-        User::instance().setAuthToken(reply->response().result().toString());
-        QDialog::accept();
+        User::instance().setAuthToken(res->authToken());
+        accept();
     }
+    res->deleteLater();
 }
 
 /*!

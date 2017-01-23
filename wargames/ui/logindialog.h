@@ -10,7 +10,6 @@
 
 #include <QDialog>
 #include <QSettings>
-#include <qjsonrpc/qjsonrpchttpclient.h>
 
 namespace Ui {
 class LoginDialog;
@@ -37,7 +36,6 @@ private slots:
 private:
     Ui::LoginDialog *ui;
     QSettings m_Settings;
-    QJsonRpcHttpClient m_Client;
 };
 
 #endif // LOGINDIALOG_H
