@@ -8,14 +8,16 @@ SOURCES += \
     game.cpp \
     gamelistmodel.cpp \
     unit.cpp \
-    user.cpp
+    user.cpp \
+    login.cpp
 
 HEADERS += \
     jsonrpc/jsonrpcwebsocketclient.h \
     game.h \
     gamelistmodel.h \
     unit.h \
-    user.h
+    user.h \
+    login.h
 
 INCLUDEPATH += $$[QT_INSTALL_PREFIX]/include/qjsonrpc
 
