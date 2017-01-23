@@ -1,9 +1,8 @@
 requires(build_test)
 
-GEST_PATH=$${GTEST_PATH}
 CONFIG(build_test) {
-    isEmpty(GTEST_PATH) {
-        error("Please define the qmake variable GTEST_PATH as the path to googletest.")
+    isEmpty(GTEST_ROOT) {
+        error("Please define the qmake variable GTEST_ROOT as the path to googletest.")
     }
 }
 
@@ -15,10 +14,10 @@ TARGET = test
 CONFIG += testcase
 
 INCLUDEPATH += \
-    $$GTEST_PATH \
-    $$GTEST_PATH/googletest/include \
-    $$GTEST_PATH/googlemock/include \
+    $$GTEST_ROOT \
+    $$GTEST_ROOT/googletest/include \
+    $$GTEST_ROOT/googlemock/include \
     ../libwargames
 
 LIBS += \
-    -L$$GTEST_PATH/bin -lgoogletest
+    -L$$GTEST_ROOT/bin -lgoogletest
