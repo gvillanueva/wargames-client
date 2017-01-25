@@ -1,11 +1,7 @@
-requires(build_test)
-
-CONFIG(build_test) {
-    isEmpty(GTEST_ROOT) {
-        error("Please define the qmake variable GTEST_ROOT as the path to googletest.")
-    }
+isEmpty(GTEST_ROOT) {
+    warning("Skipping $$_PRO_FILE_, qmake variable GTEST_ROOT must contain path to googletest")
 }
-
+else {
 QT -= qt
 TEMPLATE = app
 TARGET = test
