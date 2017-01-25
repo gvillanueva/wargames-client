@@ -7,7 +7,7 @@ TEMPLATE = app
 TARGET = test
 
 # Create 'check' target in Makefile
-CONFIG += testcase
+CONFIG += testcase console
 
 INCLUDEPATH += \
     $$GTEST_ROOT \
